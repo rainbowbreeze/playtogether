@@ -1,0 +1,3 @@
+[submodule "PlayTogether/ext-libraries/rainbowlibs"]
+	path = PlayTogether/ext-libraries/rainbowlibs
+	url = https://github.com/rainbowbreeze/rainbowlibs.git

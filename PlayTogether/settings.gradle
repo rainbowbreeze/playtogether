@@ -1,1 +1,2 @@
 include ':mobile', ':wear', ':library', ':backend'
+include ':ext-libraries:rainbowlibs'

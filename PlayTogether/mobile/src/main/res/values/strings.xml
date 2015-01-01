@@ -10,4 +10,16 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+    <string name="common_playServicesError">Google Play services is not available.  This application will close.</string>
+    <string name="common_close">Close</string>
+
+    <string name="plussignin_title">Google+ Sign in</string>
+    <string name="plussignin_btnSignOut">Sign out</string>
+    <string name="plussignin_btnRevoke">Revoke</string>
+    <string name="plussignin_statusSignedOut">Signed out</string>
+    <string name="plussignin_statusSigningIn">Signing in with Google+…</string>
+    <string name="plussignin_statusRevokeAccess">Revoked access</string>
+    <string name="plussignin_statusRevokeAccessError">Error revoking access: %s</string>
+    <string name="plussignin_signedInAs">Signed in as %s</string>
+
 </resources>

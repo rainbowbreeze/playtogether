@@ -105,7 +105,6 @@
     <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="javawriter-2.5.0" level="project" />
     <orderEntry type="module" module-name="library" exported="" />
-    <orderEntry type="module" module-name="rainbowlibs" exported="" />
   </component>
 </module>
 

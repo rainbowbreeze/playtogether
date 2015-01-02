@@ -22,4 +22,8 @@
     <string name="plussignin_statusRevokeAccessError">Error revoking access: %s</string>
     <string name="plussignin_signedInAs">Signed in as %s</string>
 
+    <string name="startgame_title">Google+ Sign in</string>
+    <string name="startgame_btnSearchForPlayers">Search for players</string>
+    <string name="startgame_btnConfirmGame">Start the game!</string>
+
 </resources>

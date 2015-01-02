@@ -1,5 +1,30 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent" android:dividerHeight="0dp"
-    android:background="#cccc" tools:context=".NavigationDrawerFragment" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#cccc"
+    tools:context="it.rainbowbreeze.playtog.ui.NavigationDrawerFragment"
+>
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/startgame_imgProfile"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="@dimen/navigation_drawer_width"
+        android:layout_margin="10dp"
+        app:border_width="2dp"
+        app:border_color="#FF000000"
+        android:src="@drawable/ic_launcher"
+    />
+
+    <ListView
+        android:id="@+id/navigation_lstItems"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#cccc"
+    />
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<it.rainbowbreeze.libs.ui.widget.CheckableRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playeritem_layContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+>
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/playeritem_imgProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        app:border_width="2dp"
+        app:border_color="#FF000000"
+        android:src="@drawable/ic_launcher"
+        android:focusable="false"
+        android:layout_marginRight="10dp"
+    />
+
+    <it.rainbowbreeze.libs.ui.widget.InertCheckBox
+        android:id="@+id/playeritem_chkPlayerSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+    />
+
+    <TextView
+        android:id="@+id/playeritem_lblPlayerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/playeritem_chkPlayerSelected"
+        android:layout_toRightOf="@id/playeritem_imgProfile"
+        android:layout_centerVertical="true"
+        android:textSize="20dp"
+        android:focusable="false"
+    />
+
+</it.rainbowbreeze.libs.ui.widget.CheckableRelativeLayout>

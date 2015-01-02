@@ -9,6 +9,7 @@ import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.ui.MainActivity;
 import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
+import it.rainbowbreeze.playtog.ui.StartGameFragment;
 
 /**
  * Dagger modules for classes that don't need an Application context
@@ -19,6 +20,7 @@ import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
                 MyApp.class,
                 MainActivity.class,
                 PlusSignInActivity.class,
+                StartGameFragment.class,
         },
         // Forces validates modules and injections at compile time.
         // If true, includes also additional modules that will complete the dependency graph

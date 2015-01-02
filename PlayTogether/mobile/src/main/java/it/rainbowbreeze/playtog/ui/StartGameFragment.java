@@ -15,14 +15,17 @@ import javax.inject.Inject;
 import it.rainbowbreeze.playtog.R;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
+import it.rainbowbreeze.playtog.domain.Player;
+import it.rainbowbreeze.playtog.logic.MatchManager;
 
 /**
  * Created by alfredomorresi on 02/01/15.
  */
-public class StartGameFragment extends Fragment{
+public class StartGameFragment extends Fragment implements PlayersAdapter.OnPlayersStatusChangedListener{
     private static final String LOG_TAG = StartGameFragment.class.getSimpleName();
 
     @Inject ILogFacility mLogFacility;
+    @Inject MatchManager mMatchManager;
     private ListView mListView;
     private PlayersAdapter mPlayersAdapter;
     private Button mBtnSearchForPlayers;
@@ -38,14 +41,11 @@ public class StartGameFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fra_startgame, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.startgame_lstPlayers);
-        mPlayersAdapter = new PlayersAdapter(getActivity());
+        mPlayersAdapter = new PlayersAdapter(
+                getActivity().getApplicationContext(),
+                mLogFacility, mMatchManager, this);
         mListView.setAdapter(mPlayersAdapter);
         mListView.setItemsCanFocus(false);
-
-        mPlayersAdapter.add("Alfredo - player 1");
-        mPlayersAdapter.add("Carla - player 2");
-        mPlayersAdapter.add("Marco - player 3");
-        mPlayersAdapter.add("Veronica - player 4");
 
         mBtnSearchForPlayers = (Button) rootView.findViewById(R.id.startgame_btnSearchForPlayers);
         mBtnSearchForPlayers.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +62,7 @@ public class StartGameFragment extends Fragment{
             }
         });
         setButtonsState();
+        updateViewsStatus();
 
         return rootView;
     }
@@ -73,7 +74,17 @@ public class StartGameFragment extends Fragment{
     }
 
     private void setButtonsState() {
-        mBtnSearchForPlayers.setEnabled(true);
-        mBtnConfirmGame.setEnabled(false);
+        mBtnSearchForPlayers.setEnabled(mMatchManager.isCallForPlayersEnabled());
+        mBtnConfirmGame.setEnabled(mMatchManager.canStartAGame());
+    }
+
+    @Override
+    public void OnPlayersStatusChanged(Player player) {
+        updateViewsStatus();
+    }
+
+    private void updateViewsStatus() {
+        mBtnSearchForPlayers.setEnabled(mMatchManager.canSearchForPlayers());
+        mBtnConfirmGame.setEnabled(mMatchManager.canStartAGame());
     }
 }

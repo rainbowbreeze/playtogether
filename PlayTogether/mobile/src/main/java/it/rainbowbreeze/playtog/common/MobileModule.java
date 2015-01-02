@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.ui.MainActivity;
 import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
 import it.rainbowbreeze.playtog.ui.StartGameFragment;
@@ -55,5 +56,11 @@ public class MobileModule {
             @ForApplication Context appContext,
             ILogFacility logFacility) {
         return new AppPrefsManager(appContext, logFacility);
+    }
+
+    @Provides @Singleton
+    public MatchManager provideMatchManager(
+            ILogFacility logFacility) {
+        return new MatchManager(logFacility);
     }
 }

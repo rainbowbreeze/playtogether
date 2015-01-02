@@ -4,7 +4,7 @@ package it.rainbowbreeze.playtog.common;
  * Created by alfredomorresi on 19/10/14.
  */
 public abstract class SharedBag {
-    public final static String APP_NAME_LOG = "PicAmazement";
+    public final static String APP_NAME_LOG = "PlayTogether";
 
 
     public final static String WEAR_PATH_AMAZINGPICTURE = "/AmazingPicture";

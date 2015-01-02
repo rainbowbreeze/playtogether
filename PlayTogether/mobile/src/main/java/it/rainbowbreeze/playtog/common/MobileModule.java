@@ -6,13 +6,27 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.ui.MainActivity;
+import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
 
 /**
  * Dagger modules for classes that don't need an Application context
  * Created by alfredomorresi on 31/10/14.
  */
 @Module (
+        injects = {
+                MyApp.class,
+                MainActivity.class,
+                PlusSignInActivity.class,
+        },
+        // Forces validates modules and injections at compile time.
+        // If true, includes also additional modules that will complete the dependency graph
+        //  using the includes statement for the class included in the injects statement
         complete = true,
+        // True because it declares @Provides not used inside the class, but outside.
+        // Once the code is finished, it should be possible to set to false and have
+        //  all the consuming classes in the injects statement
         library = true
 )
 public class MobileModule {
@@ -22,7 +36,22 @@ public class MobileModule {
         mAppContent = appContent;
     }
 
+    /**
+     * Allow the application context to be injected but require that it be annotated with
+     * {@link ForApplication @Annotation} to explicitly differentiate it from an activity context.
+     */
+    @Provides @Singleton @ForApplication public Context provideApplicationContext () {
+        return mAppContent;
+    }
+
     @Provides @Singleton public ILogFacility provideLogFacility () {
         return new LogFacility();
+    }
+
+    @Provides @Singleton
+    public AppPrefsManager provideAppPrefsManager(
+            @ForApplication Context appContext,
+            ILogFacility logFacility) {
+        return new AppPrefsManager(appContext, logFacility);
     }
 }

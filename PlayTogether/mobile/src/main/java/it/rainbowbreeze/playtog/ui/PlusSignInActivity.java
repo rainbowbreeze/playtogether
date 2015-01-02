@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +21,12 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
+import javax.inject.Inject;
+
 import it.rainbowbreeze.playtog.R;
+import it.rainbowbreeze.playtog.common.ILogFacility;
+import it.rainbowbreeze.playtog.common.MyApp;
+import it.rainbowbreeze.playtog.data.AppPrefsManager;
 
 /**
  * Android Google+ Quickstart activity.
@@ -96,9 +100,15 @@ public class PlusSignInActivity
     private Button mRevokeButton;
     private TextView mStatus;
 
+    @Inject ILogFacility mLogFacility;
+    @Inject AppPrefsManager mAppPrefsManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MyApp) getApplicationContext()).inject(this);
+        mLogFacility.logStartOfActivity(LOG_TAG, this.getClass(), savedInstanceState);
+
         setContentView(R.layout.act_plussignin);
 
         mSignInButton = (SignInButton) findViewById(R.id.plussignin_btnSignIn);
@@ -159,6 +169,7 @@ public class PlusSignInActivity
             switch (v.getId()) {
                 case R.id.plussignin_btnSignIn:
                     mStatus.setText(R.string.plussignin_statusSigningIn);
+                    mLogFacility.v(LOG_TAG, "Signing in with Google+");
                     resolveSignInError();
                     break;
                 case R.id.plussignin_btnSignOut:
@@ -166,6 +177,7 @@ public class PlusSignInActivity
                     // services will not return an onConnected callback without user
                     // interaction.
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mAppPrefsManager.setGPlusLoginDone(false);
                     mGoogleApiClient.disconnect();
                     mGoogleApiClient.connect();
                     break;
@@ -178,6 +190,7 @@ public class PlusSignInActivity
                     // to delete user data so that we comply with Google developer
                     // policies.
                     Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
+                    mAppPrefsManager.setGPlusLoginDone(false);
                     mGoogleApiClient = buildGoogleApiClient();
                     mGoogleApiClient.connect();
                     break;
@@ -194,7 +207,7 @@ public class PlusSignInActivity
     @Override
     public void onConnected(Bundle connectionHint) {
         // Reaching onConnected means we consider the user signed in.
-        Log.i(LOG_TAG, "onConnected");
+        mLogFacility.v(LOG_TAG, "onConnected");
 
         // Update the user interface to reflect that the user is signed in.
         mSignInButton.setEnabled(false);
@@ -208,12 +221,18 @@ public class PlusSignInActivity
                 getResources().getString(R.string.plussignin_signedInAs),
                 currentUser.getDisplayName()));
 
-        //TODO: do you connected work (for example, read user data with mGoogleApiClient
-        // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
-        //        .setResultCallback(this);
-
         // Indicate that the sign in process is complete.
         mSignInProgress = STATE_DEFAULT;
+
+        // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
+        //        .setResultCallback(this);
+        mLogFacility.v(LOG_TAG, "Closing sign in activity and launch main activity");
+        mAppPrefsManager.setGPlusLoginDone(true);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
     /* onConnectionFailed is called when our Activity could not connect to Google
@@ -224,7 +243,7 @@ public class PlusSignInActivity
     public void onConnectionFailed(ConnectionResult result) {
         // Refer to the javadoc for ConnectionResult to see what error codes might
         // be returned in onConnectionFailed.
-        Log.i(LOG_TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+        mLogFacility.v(LOG_TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + result.getErrorCode());
 
         if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
@@ -273,7 +292,7 @@ public class PlusSignInActivity
                 startIntentSenderForResult(mSignInIntent.getIntentSender(),
                         RC_SIGN_IN, null, 0, 0, 0);
             } catch (SendIntentException e) {
-                Log.i(LOG_TAG, "Sign in intent could not be sent: "
+                mLogFacility.v(LOG_TAG, "Sign in intent could not be sent: "
                         + e.getLocalizedMessage());
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.
@@ -342,7 +361,7 @@ public class PlusSignInActivity
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    Log.e(LOG_TAG, "Google Play services resolution cancelled");
+                                    mLogFacility.e(LOG_TAG, "Google Play services resolution cancelled");
                                     mSignInProgress = STATE_DEFAULT;
                                     mStatus.setText(R.string.plussignin_statusSignedOut);
                                 }
@@ -354,7 +373,7 @@ public class PlusSignInActivity
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Log.e(LOG_TAG, "Google Play services error could not be "
+                                            mLogFacility.e(LOG_TAG, "Google Play services error could not be "
                                                     + "resolved: " + mSignInError);
                                             mSignInProgress = STATE_DEFAULT;
                                             mStatus.setText(R.string.plussignin_statusSignedOut);

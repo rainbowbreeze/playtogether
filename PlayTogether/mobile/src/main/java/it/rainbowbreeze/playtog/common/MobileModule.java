@@ -2,11 +2,14 @@ package it.rainbowbreeze.playtog.common;
 
 import android.content.Context;
 
+import com.squareup.otto.Bus;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.logic.MainThreadBus;
 import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.ui.MainActivity;
 import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
@@ -60,7 +63,13 @@ public class MobileModule {
 
     @Provides @Singleton
     public MatchManager provideMatchManager(
-            ILogFacility logFacility) {
-        return new MatchManager(logFacility);
+            ILogFacility logFacility, Bus bus) {
+        return new MatchManager(logFacility, bus);
     }
+
+    @Provides @Singleton
+    public Bus provideBus() {
+        return new MainThreadBus();
+    }
+
 }

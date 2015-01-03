@@ -57,7 +57,7 @@ public class PlayersAdapter
                 public void onClick(View v) {
                     ViewHolder holder = (ViewHolder) v.getTag();
                     mLogFacility.v(LOG_TAG, "Clicked on item " + holder.position);
-                    mMatchManager.toggleSelection(holder.position);
+                    mMatchManager.togglePlayerSelection(holder.position);
                     setItemAppearence(holder);
                 }
             });

@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import javax.inject.Inject;
 
 import it.rainbowbreeze.playtog.R;
@@ -17,15 +20,19 @@ import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.domain.Player;
 import it.rainbowbreeze.playtog.logic.MatchManager;
+import it.rainbowbreeze.playtog.logic.PlayersUpdateEvent;
 
 /**
  * Created by alfredomorresi on 02/01/15.
  */
-public class StartGameFragment extends Fragment implements PlayersAdapter.OnPlayersStatusChangedListener{
+public class StartGameFragment
+        extends Fragment
+        implements PlayersAdapter.OnPlayersStatusChangedListener {
     private static final String LOG_TAG = StartGameFragment.class.getSimpleName();
 
     @Inject ILogFacility mLogFacility;
     @Inject MatchManager mMatchManager;
+    @Inject Bus mBus;
     private ListView mListView;
     private PlayersAdapter mPlayersAdapter;
     private Button mBtnSearchForPlayers;
@@ -51,14 +58,14 @@ public class StartGameFragment extends Fragment implements PlayersAdapter.OnPlay
         mBtnSearchForPlayers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mMatchManager.startSearchingForPlayer();
             }
         });
         mBtnConfirmGame = (Button) rootView.findViewById(R.id.startgame_btnConfirmGame);
         mBtnConfirmGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mMatchManager.startTheGame();
             }
         });
         setButtonsState();
@@ -71,6 +78,18 @@ public class StartGameFragment extends Fragment implements PlayersAdapter.OnPlay
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MyApp) activity.getApplicationContext()).inject(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mBus.unregister(this);
     }
 
     private void setButtonsState() {
@@ -86,5 +105,13 @@ public class StartGameFragment extends Fragment implements PlayersAdapter.OnPlay
     private void updateViewsStatus() {
         mBtnSearchForPlayers.setEnabled(mMatchManager.canSearchForPlayers());
         mBtnConfirmGame.setEnabled(mMatchManager.canStartAGame());
+    }
+
+    /**
+     *
+     * @param playersUpdateEvent
+     */
+    @Subscribe public void playersUpdate(PlayersUpdateEvent playersUpdateEvent) {
+        mPlayersAdapter.notifyDataSetChanged();
     }
 }

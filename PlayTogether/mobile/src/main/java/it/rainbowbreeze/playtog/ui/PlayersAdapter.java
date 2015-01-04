@@ -71,6 +71,7 @@ public class PlayersAdapter
         if (!TextUtils.isEmpty(player.getPictureUrl())) {
             Picasso.with(holder.imgPicture.getContext())
                     .load(player.getPictureUrl())
+                    .noFade()  // Required by CircleImageView
                     .into(holder.imgPicture);
 
         }

@@ -61,6 +61,8 @@ public class PlayersAdapter
                     .load(player.getPictureUrl())
                     .noFade()  // Required by CircleImageView
                     .into(holder.imgPicture);
+        } else {
+            holder.imgPicture.setImageResource(R.drawable.ic_noprofile);
         }
     }
 

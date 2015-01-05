@@ -38,7 +38,7 @@ public class PlayerDao {
     /**
      * Remove all players from the Content Provider
      */
-    public void removeAll() {
+    public void deleteAll() {
         PlayerSelection where = new PlayerSelection();
         mAppContext.getContentResolver().delete(PlayerColumns.CONTENT_URI, where.sel(), where.args());
     }

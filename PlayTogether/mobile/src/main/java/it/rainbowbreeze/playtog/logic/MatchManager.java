@@ -26,19 +26,49 @@ public class MatchManager {
         mLogFacility = logFacility;
         mPlayerDao = playerDao;
         mBus = bus;
-        mStartedSearchForPlayers = false;
-
-        add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
+        cleanGameStateAndData();
     }
 
-    public void add(Player newPlayer) {
+    /**
+     * Add a new player for the game
+     *
+     * @param newPlayer
+     */
+    private void add(Player newPlayer) {
         mPlayerDao.insert(newPlayer);
     }
 
-    public boolean isCallForPlayersEnabled() {
-        return true;
+    /**
+     * Returns a {@link android.database.Cursor} Loader for the players that accepted the game
+     * @return
+     */
+    public Loader<Cursor> getPlayersForTheGame() {
+        return mPlayerDao.getPlayersForTheGame();
     }
 
+    /**
+     * Clean all the game data. Used, generally, when the app starts for the first time or
+     * when a new call for player is started
+     */
+    public void cleanGameStateAndData() {
+        mStartedSearchForPlayers = false;
+        mPlayerDao.deleteAll();
+        addCurrentPlayer();
+    }
+
+    /**
+     * Checks if a call for players can be launched, given the actual context (if another call has
+     * already been started, etc)
+     * @return
+     */
+    public boolean canSearchForPlayers() {
+        return !mStartedSearchForPlayers;
+    }
+
+    /**
+     * Checks if a game can be started, given the selected players and other data
+     * @return
+     */
     public boolean canStartAGame() {
         return mPlayerDao.countSelectedPlayers() > 2;
     }
@@ -59,23 +89,10 @@ public class MatchManager {
     }
 
     /**
-     * Returns a {@link android.database.Cursor} Loader for the players that accepted the game
-     * @return
-     */
-    public Loader<Cursor> getPlayersForTheGame() {
-        return mPlayerDao.getPlayersForTheGame();
-    }
-
-    public boolean canSearchForPlayers() {
-        return !mStartedSearchForPlayers;
-    }
-
-    /**
      * Starts the search for players
      */
     public void startSearchingForPlayer() {
-        mPlayerDao.removeAll();
-        //TODO: Add the current player in the list
+        cleanGameStateAndData();  // Just to be sure!
 
         //TODO: launch the backend command for starting the search
 
@@ -119,12 +136,25 @@ public class MatchManager {
         
     }
 
+    /**
+     * Starts the game with the selected players
+     */
     public void startTheGame() {
         mStartedSearchForPlayers = false;
 
-        //TODO Sends notification to selected players
+        //TODO Sends notification to selected and not selected players
 
 
         //TODO Notifies the backend about the start of the game
     }
+
+    /**
+     * Creates a new player represented by the current user
+     */
+    private void addCurrentPlayer() {
+        //TODO
+        add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
+    }
+
+
 }

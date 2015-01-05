@@ -18,7 +18,13 @@
         {
             "name": "backendId",
             "type": "String",
-            "nullable": true,
+            "nullable": false,
+        },
+        {
+            "name": "selected",
+            "type": "Boolean",
+            "nullable": false,
+            "defaultValue": 0,
         },
     ]
 }

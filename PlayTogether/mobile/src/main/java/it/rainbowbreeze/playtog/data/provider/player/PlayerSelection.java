@@ -112,4 +112,9 @@ public class PlayerSelection extends AbstractSelection<PlayerSelection> {
         addLike(PlayerColumns.BACKENDID, value);
         return this;
     }
+
+    public PlayerSelection selected(boolean value) {
+        addEquals(PlayerColumns.SELECTED, toObjectArray(value));
+        return this;
+    }
 }

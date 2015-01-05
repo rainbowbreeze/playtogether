@@ -43,10 +43,17 @@ public class PlayerCursor extends AbstractCursor {
 
     /**
      * Get the {@code backendid} value.
-     * Can be {@code null}.
+     * Cannot be {@code null}.
      */
     public String getBackendid() {
         Integer index = getCachedColumnIndexOrThrow(PlayerColumns.BACKENDID);
         return getString(index);
+    }
+
+    /**
+     * Get the {@code selected} value.
+     */
+    public boolean getSelected() {
+        return getBoolean(PlayerColumns.SELECTED);
     }
 }

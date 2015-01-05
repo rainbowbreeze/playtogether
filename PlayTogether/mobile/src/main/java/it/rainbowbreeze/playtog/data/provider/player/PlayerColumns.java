@@ -17,6 +17,7 @@ public class PlayerColumns implements BaseColumns {
     public static final String NAME = new String("name");
     public static final String SOCIALID = new String("socialid");
     public static final String BACKENDID = new String("backendid");
+    public static final String SELECTED = new String("selected");
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
     
@@ -26,7 +27,8 @@ public class PlayerColumns implements BaseColumns {
             PHOTOURL,
             NAME,
             SOCIALID,
-            BACKENDID
+            BACKENDID,
+            SELECTED
     };
     // @formatter:on
 
@@ -38,6 +40,7 @@ public class PlayerColumns implements BaseColumns {
             if (c == NAME) return true;
             if (c == SOCIALID) return true;
             if (c == BACKENDID) return true;
+            if (c == SELECTED) return true;
         }
         return false;
     }
@@ -48,6 +51,7 @@ public class PlayerColumns implements BaseColumns {
         if (columnName == NAME) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
         if (columnName == SOCIALID) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
         if (columnName == BACKENDID) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
+        if (columnName == SELECTED) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
         return null;
     }
 
@@ -56,6 +60,7 @@ public class PlayerColumns implements BaseColumns {
         if (columnName == NAME) return TABLE_NAME + "__" + columnName;
         if (columnName == SOCIALID) return TABLE_NAME + "__" + columnName;
         if (columnName == BACKENDID) return TABLE_NAME + "__" + columnName;
+        if (columnName == SELECTED) return TABLE_NAME + "__" + columnName;
         return null;
     }
 }

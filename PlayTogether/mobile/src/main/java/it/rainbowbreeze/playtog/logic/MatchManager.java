@@ -1,11 +1,12 @@
 package it.rainbowbreeze.playtog.logic;
 
+import android.database.Cursor;
+import android.support.v4.content.Loader;
+
 import com.squareup.otto.Bus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.rainbowbreeze.playtog.common.ILogFacility;
+import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.domain.Player;
 
 /**
@@ -18,56 +19,66 @@ public class MatchManager {
 
     private final ILogFacility mLogFacility;
     private final Bus mBus;
-    private final List<Player> mPlayers;
+    private final PlayerDao mPlayerDao;
     private boolean mStartedSearchForPlayers;
 
-    public MatchManager(ILogFacility logFacility, Bus bus) {
+    public MatchManager(ILogFacility logFacility, PlayerDao playerDao, Bus bus) {
         mLogFacility = logFacility;
+        mPlayerDao = playerDao;
         mBus = bus;
-        mPlayers = new ArrayList<Player>();
         mStartedSearchForPlayers = false;
 
         add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
     }
 
     public void add(Player newPlayer) {
-        mPlayers.add(newPlayer);
+        mPlayerDao.insert(newPlayer);
     }
-
-    public void removeAllPlayer() {
-        mPlayers.clear();
-    }
-
-    public List<Player> getPlayers() {
-        return mPlayers;
-    }
-
 
     public boolean isCallForPlayersEnabled() {
         return true;
     }
 
     public boolean canStartAGame() {
-        int selected = 0;
-        for (Player player : mPlayers) {
-            if (player.isSelected()) selected ++;
-        }
-        return selected > 2;
+        return mPlayerDao.countSelectedPlayers() > 2;
     }
 
-    public void togglePlayerSelection(int playerPosition) {
-        if (playerPosition > mPlayers.size()) {
-            mLogFacility.e(LOG_TAG, "Index out of bounds: required " + playerPosition + ", size: " + mPlayers.size());
-            return;
+    /**
+     * Toggles the selected state of a player, and do the math to verify if the game can be
+     * launched
+     *
+     * @param playerId
+     */
+    public void togglePlayerSelection(long playerId) {
+        int result = mPlayerDao.toggleSelectionById(playerId);
+        if (result > 0) {
+            mLogFacility.v(LOG_TAG, "Toggled selection status for player id " + playerId);
+        } else {
+            mLogFacility.e(LOG_TAG, "Strange, cannot toggle selection status for player id " + playerId);
         }
-        mPlayers.get(playerPosition).toggleSelected();
+    }
+
+    /**
+     * Returns a {@link android.database.Cursor} Loader for the players that accepted the game
+     * @return
+     */
+    public Loader<Cursor> getPlayersForTheGame() {
+        return mPlayerDao.getPlayersForTheGame();
     }
 
     public boolean canSearchForPlayers() {
         return !mStartedSearchForPlayers;
     }
 
+    /**
+     * Starts the search for players
+     */
     public void startSearchingForPlayer() {
+        mPlayerDao.removeAll();
+        //TODO: Add the current player in the list
+
+        //TODO: launch the backend command for starting the search
+
         mStartedSearchForPlayers = true;
 
         new Thread(new Runnable() {
@@ -111,8 +122,9 @@ public class MatchManager {
     public void startTheGame() {
         mStartedSearchForPlayers = false;
 
-        // Sends notification to selected players
+        //TODO Sends notification to selected players
 
-        // Change views
+
+        //TODO Notifies the backend about the start of the game
     }
 }

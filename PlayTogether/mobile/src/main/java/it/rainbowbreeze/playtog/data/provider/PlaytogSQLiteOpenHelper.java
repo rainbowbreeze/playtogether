@@ -26,11 +26,12 @@ public class PlaytogSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_PLAYER = "CREATE TABLE IF NOT EXISTS "
             + PlayerColumns.TABLE_NAME + " ( "
             + PlayerColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + PlayerColumns.PHOTOURL + " TEXT NOT NULL, "
+            + PlayerColumns.PICTUREURL + " TEXT, "
             + PlayerColumns.NAME + " TEXT NOT NULL, "
             + PlayerColumns.SOCIALID + " TEXT NOT NULL, "
             + PlayerColumns.BACKENDID + " TEXT NOT NULL, "
-            + PlayerColumns.SELECTED + " INTEGER NOT NULL DEFAULT '0' "
+            + PlayerColumns.SELECTED + " INTEGER NOT NULL DEFAULT '0', "
+            + PlayerColumns.ACCEPTEDDATE + " INTEGER NOT NULL "
             + " );";
 
     // @formatter:on

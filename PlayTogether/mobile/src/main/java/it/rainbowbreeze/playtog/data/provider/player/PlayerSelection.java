@@ -53,18 +53,18 @@ public class PlayerSelection extends AbstractSelection<PlayerSelection> {
     }
 
 
-    public PlayerSelection photourl(String... value) {
-        addEquals(PlayerColumns.PHOTOURL, value);
+    public PlayerSelection pictureurl(String... value) {
+        addEquals(PlayerColumns.PICTUREURL, value);
         return this;
     }
 
-    public PlayerSelection photourlNot(String... value) {
-        addNotEquals(PlayerColumns.PHOTOURL, value);
+    public PlayerSelection pictureurlNot(String... value) {
+        addNotEquals(PlayerColumns.PICTUREURL, value);
         return this;
     }
 
-    public PlayerSelection photourlLike(String... value) {
-        addLike(PlayerColumns.PHOTOURL, value);
+    public PlayerSelection pictureurlLike(String... value) {
+        addLike(PlayerColumns.PICTUREURL, value);
         return this;
     }
 
@@ -115,6 +115,41 @@ public class PlayerSelection extends AbstractSelection<PlayerSelection> {
 
     public PlayerSelection selected(boolean value) {
         addEquals(PlayerColumns.SELECTED, toObjectArray(value));
+        return this;
+    }
+
+    public PlayerSelection accepteddate(Date... value) {
+        addEquals(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
+
+    public PlayerSelection accepteddateNot(Date... value) {
+        addNotEquals(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
+
+    public PlayerSelection accepteddate(long... value) {
+        addEquals(PlayerColumns.ACCEPTEDDATE, toObjectArray(value));
+        return this;
+    }
+
+    public PlayerSelection accepteddateAfter(Date value) {
+        addGreaterThan(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
+
+    public PlayerSelection accepteddateAfterEq(Date value) {
+        addGreaterThanOrEquals(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
+
+    public PlayerSelection accepteddateBefore(Date value) {
+        addLessThan(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
+
+    public PlayerSelection accepteddateBeforeEq(Date value) {
+        addLessThanOrEquals(PlayerColumns.ACCEPTEDDATE, value);
         return this;
     }
 }

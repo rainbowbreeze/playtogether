@@ -26,12 +26,15 @@ public class PlayerContentValues extends AbstractContentValues {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
-    public PlayerContentValues putPhotourl(String value) {
-        if (value == null) throw new IllegalArgumentException("value for photourl must not be null");
-        mContentValues.put(PlayerColumns.PHOTOURL, value);
+    public PlayerContentValues putPictureurl(String value) {
+        mContentValues.put(PlayerColumns.PICTUREURL, value);
         return this;
     }
 
+    public PlayerContentValues putPictureurlNull() {
+        mContentValues.putNull(PlayerColumns.PICTUREURL);
+        return this;
+    }
 
 
     public PlayerContentValues putName(String value) {
@@ -63,5 +66,18 @@ public class PlayerContentValues extends AbstractContentValues {
         return this;
     }
 
+
+
+    public PlayerContentValues putAccepteddate(Date value) {
+        if (value == null) throw new IllegalArgumentException("value for accepteddate must not be null");
+        mContentValues.put(PlayerColumns.ACCEPTEDDATE, value.getTime());
+        return this;
+    }
+
+
+    public PlayerContentValues putAccepteddate(long value) {
+        mContentValues.put(PlayerColumns.ACCEPTEDDATE, value);
+        return this;
+    }
 
 }

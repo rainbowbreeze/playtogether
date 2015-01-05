@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.logic.MainThreadBus;
 import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.ui.MainActivity;
@@ -63,13 +64,22 @@ public class MobileModule {
 
     @Provides @Singleton
     public MatchManager provideMatchManager(
-            ILogFacility logFacility, Bus bus) {
-        return new MatchManager(logFacility, bus);
+            ILogFacility logFacility,
+            PlayerDao playerDao,
+            Bus bus) {
+        return new MatchManager(logFacility, playerDao, bus);
     }
 
     @Provides @Singleton
     public Bus provideBus() {
         return new MainThreadBus();
+    }
+
+    @Provides @Singleton
+    public PlayerDao providePlayerDao(
+            @ForApplication Context appContext,
+            ILogFacility logFacility) {
+        return new PlayerDao(appContext, logFacility);
     }
 
 }

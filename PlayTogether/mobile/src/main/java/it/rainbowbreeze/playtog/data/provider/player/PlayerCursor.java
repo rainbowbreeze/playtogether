@@ -15,11 +15,11 @@ public class PlayerCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code photourl} value.
-     * Cannot be {@code null}.
+     * Get the {@code pictureurl} value.
+     * Can be {@code null}.
      */
-    public String getPhotourl() {
-        Integer index = getCachedColumnIndexOrThrow(PlayerColumns.PHOTOURL);
+    public String getPictureurl() {
+        Integer index = getCachedColumnIndexOrThrow(PlayerColumns.PICTUREURL);
         return getString(index);
     }
 
@@ -55,5 +55,13 @@ public class PlayerCursor extends AbstractCursor {
      */
     public boolean getSelected() {
         return getBoolean(PlayerColumns.SELECTED);
+    }
+
+    /**
+     * Get the {@code accepteddate} value.
+     * Cannot be {@code null}.
+     */
+    public Date getAccepteddate() {
+        return getDate(PlayerColumns.ACCEPTEDDATE);
     }
 }

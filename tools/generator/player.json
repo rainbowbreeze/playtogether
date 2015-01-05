@@ -1,9 +1,9 @@
 {
     "fields": [
         {
-            "name": "photourl",
+            "name": "pictureurl",
             "type": "String",
-            "nullable": false,
+            "nullable": true,
         },
         {
             "name": "name",
@@ -26,5 +26,11 @@
             "nullable": false,
             "defaultValue": 0,
         },
+        {
+            "name": "acceptedDate",
+            "type": "Date",
+            "nullable": false,
+        },
+
     ]
 }

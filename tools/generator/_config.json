@@ -1,0 +1,12 @@
+{
+    "syntaxVersion": "1.7",
+    "projectPackageId": "it.rainbowbreeze.playtog",
+    "authority": "it.rainbowbreeze.playtog.provider",
+    "providerJavaPackage": "it.rainbowbreeze.playtog.data.provider",
+    "providerClassName": "PlayerProvider",
+    "sqliteOpenHelperClassName": "PlaytogSQLiteOpenHelper",
+    "sqliteOpenHelperCallbacksClassName": "PlaytogSQLiteOpenHelperCallbacks",
+    "databaseFileName": "playtog.db",
+    "databaseVersion": 1,
+    "enableForeignKeys": true,
+}

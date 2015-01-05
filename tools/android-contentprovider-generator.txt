@@ -1,0 +1,6 @@
+Android ContentProvider Generator
+
+https://github.com/BoD/android-contentprovider-generator
+https://github.com/BoD/android-contentprovider-generator.git
+
+cd ~/Documents/develop/repositories/playtogether/master/tools && rm -rf generated && java -jar android-contentprovider-generator/target/android-contentprovider-generator-1.8.0-bundle.jar -i generator -o generated && cp -a generated/it/ ../PlayTogether/mobile/src/main/java/it/ && rm -rf generated

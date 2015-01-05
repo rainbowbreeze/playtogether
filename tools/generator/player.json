@@ -1,0 +1,24 @@
+{
+    "fields": [
+        {
+            "name": "photourl",
+            "type": "String",
+            "nullable": false,
+        },
+        {
+            "name": "name",
+            "type": "String",
+            "nullable": false,
+        },
+        {
+            "name": "socialId",
+            "type": "String",
+            "nullable": false,
+        },
+        {
+            "name": "backendId",
+            "type": "String",
+            "nullable": true,
+        },
+    ]
+}

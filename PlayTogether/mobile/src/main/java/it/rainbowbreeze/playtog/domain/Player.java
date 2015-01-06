@@ -16,7 +16,6 @@ public class Player {
 
     public Player() {
         setSocialId("test-social");
-        setBackendId("test-backend");
         setAcceptedDate(new Date());
     }
 

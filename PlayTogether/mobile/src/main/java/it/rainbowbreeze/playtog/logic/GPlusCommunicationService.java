@@ -24,8 +24,8 @@ import it.rainbowbreeze.playtog.domain.Player;
 public class GPlusCommunicationService extends GoogleApiClientBaseService {
     private static final String LOG_TAG = GPlusCommunicationService.class.getSimpleName();
 
-    public static final String ACTION_LOADCURRENTUSER = "Action.Plus.LoadCurrentUser";
-    public static final String ACTION_LOADUSER = "Action.Plus.LoadUser";
+    public static final String ACTION_LOADCURRENTUSER = "it.rainbowbreeze.playtog.Action.Plus.LoadCurrentUser";
+    public static final String ACTION_LOADUSER = "it.rainbowbreeze.playtog.Action.Plus.LoadUser";
     public static final String EXTRA_USERID = "Param.UserId";
 
     @Inject ILogFacility mLogFacility;

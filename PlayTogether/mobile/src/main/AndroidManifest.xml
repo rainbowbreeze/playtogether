@@ -30,6 +30,7 @@
             android:value="@integer/google_play_services_version"
         />
 
+        <!-- Activities -->
         <activity
             android:name=".ui.PlusSignInActivity"
             android:label="@string/plussignin_title" >
@@ -45,11 +46,18 @@
             </intent-filter>
         </activity>
 
+        <!-- Providers -->
         <provider
             android:name=".data.provider.PlayerProvider"
             android:authorities="it.rainbowbreeze.playtog.provider"
             android:exported="false"
         />
+
+        <!-- Services -->
+        <service
+            android:name=".logic.GPlusCommunicationService" >
+        </service>
+
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,9 +21,11 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import it.rainbowbreeze.playtog.R;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
@@ -101,6 +104,7 @@ public class PlusSignInActivity
     private Button mSignOutButton;
     private Button mRevokeButton;
     private TextView mStatus;
+    private CircleImageView mImgProfile;
     private boolean mLaunchNewActivityAtTheEnd;
 
     @Inject ILogFacility mLogFacility;
@@ -117,6 +121,7 @@ public class PlusSignInActivity
 
         setContentView(R.layout.act_plussignin);
 
+        mImgProfile = (CircleImageView) findViewById(R.id.plussignin_imgProfile);
         mSignInButton = (SignInButton) findViewById(R.id.plussignin_btnSignIn);
         mSignOutButton = (Button) findViewById(R.id.plussignin_btnSignOut);
         mRevokeButton = (Button) findViewById(R.id.plussignin_btnRevoke);
@@ -183,7 +188,6 @@ public class PlusSignInActivity
                     // services will not return an onConnected callback without user
                     // interaction.
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    mAppPrefsManager.setGPlusLoginDone(false);
                     mGoogleApiClient.disconnect();
                     mGoogleApiClient.connect();
                     break;
@@ -196,7 +200,6 @@ public class PlusSignInActivity
                     // to delete user data so that we comply with Google developer
                     // policies.
                     Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
-                    mAppPrefsManager.setGPlusLoginDone(false);
                     mGoogleApiClient = buildGoogleApiClient();
                     mGoogleApiClient.connect();
                     break;
@@ -226,6 +229,17 @@ public class PlusSignInActivity
         mStatus.setText(String.format(
                 getResources().getString(R.string.plussignin_signedInAs),
                 currentUser.getDisplayName()));
+        if (null != currentUser.getImage() && !TextUtils.isEmpty(currentUser.getImage().getUrl())) {
+            mImgProfile.setVisibility(View.VISIBLE);
+            mSignInButton.setVisibility(View.GONE);
+            Picasso.with(getApplicationContext())
+                    .load(currentUser.getImage().getUrl())
+                    .noFade()  // Required by CircleImageView
+                    .into(mImgProfile);
+        } else {
+            mImgProfile.setVisibility(View.GONE);
+            mSignInButton.setVisibility(View.VISIBLE);
+        }
 
         // Indicate that the sign in process is complete.
         mSignInProgress = STATE_DEFAULT;
@@ -238,7 +252,6 @@ public class PlusSignInActivity
         // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
         //        .setResultCallback(this);
         mLogFacility.v(LOG_TAG, "Closing sign in activity and launch main activity");
-        mAppPrefsManager.setGPlusLoginDone(true);
 
         if (mLaunchNewActivityAtTheEnd) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -347,10 +360,13 @@ public class PlusSignInActivity
 
     private void onSignedOut() {
         // Update the UI to reflect that the user is signed out.
+        mImgProfile.setVisibility(View.GONE);
         mSignInButton.setEnabled(true);
+        mSignInButton.setVisibility(View.VISIBLE);
         mSignOutButton.setEnabled(false);
         mRevokeButton.setEnabled(false);
 
+        mAppPrefsManager.resetCurrentPlayer();
         mStatus.setText(R.string.plussignin_statusSignedOut);
     }
 

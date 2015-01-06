@@ -30,18 +30,12 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
     @Override
     protected void setDefaultValuesInternal() {
         mLogFacility.v(LOG_TAG, "Setting default values of preferences");
-        setGPlusLoginDone(false);
+        resetCurrentPlayer();
     }
 
     private static final String PREF_GPLUS_LOGIN_DONE = "pref_gpluslogindone";
     public boolean isGPlusLoginDone() {
         return mAppPreferences.getBoolean(PREF_GPLUS_LOGIN_DONE, false);
-    }
-    public AppPrefsManager setGPlusLoginDone(boolean newValue) {
-        openSharedEditor();
-        mSharedEditor.putBoolean(PREF_GPLUS_LOGIN_DONE, newValue);
-        saveIfNeeded();
-        return this;
     }
 
     private static final String PREF_GPLUS_BACKENDID = "pref_gplusBackendId";
@@ -70,11 +64,13 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
      * @return
      */
     public AppPrefsManager setCurrentPlayer(Player player) {
+        mLogFacility.v(LOG_TAG, "Setting current user as new person called " + player.getName());
         openSharedEditor();
         mSharedEditor.putString(PREF_GPLUS_BACKENDID, player.getBackendId());
         mSharedEditor.putString(PREF_GPLUS_NAME, player.getName());
         mSharedEditor.putString(PREF_GPLUS_PICTUREURL, player.getPictureUrl());
         mSharedEditor.putString(PREF_GPLUS_SOCIALID, player.getSocialId());
+        mSharedEditor.putBoolean(PREF_GPLUS_LOGIN_DONE, true);
         saveIfNeeded();
         return this;
     }
@@ -84,11 +80,13 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
      * @return
      */
     public AppPrefsManager resetCurrentPlayer() {
+        mLogFacility.v(LOG_TAG, "Resetting current user");
         openSharedEditor();
         mSharedEditor.putString(PREF_GPLUS_BACKENDID, NULL_STRING);
         mSharedEditor.putString(PREF_GPLUS_NAME, NULL_STRING);
         mSharedEditor.putString(PREF_GPLUS_PICTUREURL, NULL_STRING);
         mSharedEditor.putString(PREF_GPLUS_SOCIALID, NULL_STRING);
+        mSharedEditor.putBoolean(PREF_GPLUS_LOGIN_DONE, false);
         saveIfNeeded();
         return this;
     }

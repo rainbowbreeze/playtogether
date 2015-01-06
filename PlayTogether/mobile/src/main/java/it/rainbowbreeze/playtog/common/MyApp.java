@@ -2,10 +2,13 @@ package it.rainbowbreeze.playtog.common;
 
 import android.app.Application;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.Arrays;
 import java.util.List;
 
 import dagger.ObjectGraph;
+import it.rainbowbreeze.playtog.BuildConfig;
 
 /**
  * This file is part of KeepMoving. KeepMoving is free software: you can
@@ -36,10 +39,11 @@ public class MyApp extends Application {
 
     @Override
     public void onCreate() {
-
         super.onCreate();
 
         mObjectGraph = ObjectGraph.create(getModules().toArray());
+        Picasso.with(getApplicationContext()).setIndicatorsEnabled(BuildConfig.DEBUG);
+        Picasso.with(getApplicationContext()).setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     /**

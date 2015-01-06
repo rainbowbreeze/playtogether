@@ -31,6 +31,7 @@ import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.domain.Player;
+import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 
 /**
  * Android Google+ Quickstart activity.
@@ -109,6 +110,7 @@ public class PlusSignInActivity
 
     @Inject ILogFacility mLogFacility;
     @Inject AppPrefsManager mAppPrefsManager;
+    @Inject ActionsManager mActionsManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -248,6 +250,7 @@ public class PlusSignInActivity
         // TODO maybe a service is more appropriate for async operation
         mLogFacility.v(LOG_TAG, "Creating a player from current user " + currentUser.toString());
         mAppPrefsManager.setCurrentPlayer(Player.createFrom(currentUser));
+        mActionsManager.SubscribeClientToGcm().executeAsync();
 
         // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
         //        .setResultCallback(this);
@@ -367,6 +370,7 @@ public class PlusSignInActivity
         mRevokeButton.setEnabled(false);
 
         mAppPrefsManager.resetCurrentPlayer();
+        mActionsManager.UnsubscribeClientToGcm().executeAsync();
         mStatus.setText(R.string.plussignin_statusSignedOut);
     }
 

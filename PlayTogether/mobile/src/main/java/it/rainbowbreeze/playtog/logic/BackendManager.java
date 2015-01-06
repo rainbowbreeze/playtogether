@@ -61,6 +61,7 @@ public class BackendManager {
     }
 
     public void unregisterClient() {
+        mLogFacility.v(LOG_TAG, "Unregistering this client from the GCM backend");
         setupRegistration();
 
         String regId = mAppPrefsManager.getGCMRegId();
@@ -71,8 +72,9 @@ public class BackendManager {
             // Don't need to unregister from GCM server, only from the backend.
             // See Look at GoogleCloudMessaging.html#unregister() reference for detailed instructions
             mRegService.unregister(regId).execute();
+            mLogFacility.v(LOG_TAG, "Unregistered this client from the GCM backend");
         } catch (IOException ex) {
-            mLogFacility.e(LOG_TAG, "Error registering the client", ex);
+            mLogFacility.e(LOG_TAG, "Error unregistering the client", ex);
         }
     }
 

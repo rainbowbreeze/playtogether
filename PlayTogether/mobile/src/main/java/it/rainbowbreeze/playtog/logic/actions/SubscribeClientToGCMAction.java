@@ -2,37 +2,43 @@ package it.rainbowbreeze.playtog.logic.actions;
 
 import it.rainbowbreeze.libs.common.IRainbowLogFacility;
 import it.rainbowbreeze.libs.logic.RainbowActionsManager;
+import it.rainbowbreeze.playtog.logic.BackendManager;
 
 /**
  * Created by alfredomorresi on 06/01/15.
  */
 public class SubscribeClientToGCMAction extends RainbowActionsManager.BaseAction {
-    protected SubscribeClientToGCMAction(IRainbowLogFacility logFacility, ActionsManager actionManager) {
+    private static final String LOG_TAG = SubscribeClientToGCMAction.class.getSimpleName();
+
+    private final BackendManager mBackendManager;
+
+    protected SubscribeClientToGCMAction(IRainbowLogFacility logFacility, BackendManager backendManager, ActionsManager actionManager) {
         super(logFacility, actionManager);
+        mBackendManager = backendManager;
     }
 
     @Override
     protected boolean isDataValid() {
-        return false;
+        return true;
     }
 
     @Override
     protected void doYourStuff() {
-
+        mBackendManager.registerClient();
     }
 
     @Override
     protected ConcurrencyType getConcurrencyType() {
-        return null;
+        return ConcurrencyType.SingleInstance;
     }
 
     @Override
     protected String getUniqueActionId() {
-        return null;
+        return LOG_TAG;
     }
 
     @Override
     protected String getLogTag() {
-        return null;
+        return LOG_TAG;
     }
 }

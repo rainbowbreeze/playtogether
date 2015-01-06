@@ -95,8 +95,10 @@ public class MobileModule {
 
     @Provides @Singleton
     public BackendManager provideBackendManager(
-            ILogFacility logFacility) {
-        return new BackendManager(logFacility);
+            @ForApplication Context appContext,
+            ILogFacility logFacility,
+            AppPrefsManager appPrefsManager) {
+        return new BackendManager(appContext, logFacility, appPrefsManager);
     }
 
 }

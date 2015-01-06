@@ -13,11 +13,17 @@ public class ActionsManager extends RainbowActionsManager {
     private static final String LOG_TAG = ActionsManager.class.getSimpleName();
     private final Context mAppContext;
     private final BackendManager mBackendManager;
+    private final ILogFacility mLogFacility;
 
 
     public ActionsManager(Context appContext, ILogFacility logFacility, BackendManager backendManager) {
         super(logFacility, LOG_TAG);
         mAppContext = appContext;
+        mLogFacility = logFacility;
         mBackendManager = backendManager;
+    }
+
+    public SubscribeClientToGCMAction SubscribeClientToGCM() {
+        return new SubscribeClientToGCMAction(mLogFacility, mBackendManager, this);
     }
 }

@@ -91,4 +91,22 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
         return this;
     }
 
+
+    /**
+     * Google Cloud Message registration id. It should be generated once for each installed app,
+     * so even if the user unregisters from the backend, the next time she registers the previous
+     * registration id should be user.
+     *
+     * Look at GoogleCloudMessaging.html#unregister() reference for detailed instructions
+     */
+    private static final String PREF_GCM_REGID = "pref_gcmRegId";
+    public String getGCMRegId() {
+        return mAppPreferences.getString(PREF_GCM_REGID, "");
+    }
+    public AppPrefsManager setGCMRegId(String newValue) {
+        openSharedEditor();
+        mSharedEditor.putString(PREF_GCM_REGID, newValue);
+        saveIfNeeded();
+        return this;
+    }
 }

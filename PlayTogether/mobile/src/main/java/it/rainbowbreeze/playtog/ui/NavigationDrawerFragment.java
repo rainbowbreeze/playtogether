@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import it.rainbowbreeze.playtog.R;
 
 /**
@@ -98,15 +100,12 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+        String[] sectionTitles = getResources().getStringArray(R.array.navigation_arrSections);
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));
+                sectionTitles));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return rootView;
     }

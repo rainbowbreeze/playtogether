@@ -66,6 +66,7 @@ public class PlusSignInActivity
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
 
     private static final String SAVED_PROGRESS = "sign_in_progress";
+    public static final String EXTRA_LAUNCHNEWACTIVITY = "LaunchNewActivity";
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
@@ -100,6 +101,7 @@ public class PlusSignInActivity
     private Button mSignOutButton;
     private Button mRevokeButton;
     private TextView mStatus;
+    private boolean mLaunchNewActivityAtTheEnd;
 
     @Inject ILogFacility mLogFacility;
     @Inject AppPrefsManager mAppPrefsManager;
@@ -109,6 +111,9 @@ public class PlusSignInActivity
         super.onCreate(savedInstanceState);
         ((MyApp) getApplicationContext()).inject(this);
         mLogFacility.logStartOfActivity(LOG_TAG, this.getClass(), savedInstanceState);
+
+        // Launch a new activity at the end or simply close the activity
+        mLaunchNewActivityAtTheEnd = getIntent().getBooleanExtra(EXTRA_LAUNCHNEWACTIVITY, false);
 
         setContentView(R.layout.act_plussignin);
 
@@ -137,7 +142,7 @@ public class PlusSignInActivity
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API, Plus.PlusOptions.builder().build())
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)  // Required by load APIs
                 .build();
     }
 
@@ -235,9 +240,11 @@ public class PlusSignInActivity
         mLogFacility.v(LOG_TAG, "Closing sign in activity and launch main activity");
         mAppPrefsManager.setGPlusLoginDone(true);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (mLaunchNewActivityAtTheEnd) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
     }
 

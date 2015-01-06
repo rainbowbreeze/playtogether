@@ -44,8 +44,7 @@ public class MainActivity extends ActionBarActivity
         // Checks if the user is logged
         if (!mAppPrefsManager.isGPlusLoginDone()) {
             mLogFacility.v(LOG_TAG, "User haven't not signed in, Launching Google+ SignIn");
-            Intent intent = new Intent(this, PlusSignInActivity.class);
-            startActivity(intent);
+            startActivity(prepareSignInActivityIntent(false));
             finish();
             return;
         }
@@ -68,31 +67,30 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment finalFragment;
+        Fragment finalFragment = null;
+        Intent intent = null;
         switch (position) {
-            case 0:
+            case 0:  // Game fragment
                 finalFragment = new StartGameFragment();
+                break;
+            case 2:  // Profile activity
+                intent = prepareSignInActivityIntent(true);
                 break;
             default:
                 finalFragment = PlaceholderFragment.newInstance(position + 1);
         }
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, finalFragment)
-                .commit();
+        if (null != intent) {
+            startActivity(intent);
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, finalFragment)
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
+        String[] sectionTitles = getResources().getStringArray(R.array.navigation_arrSections);
+        mTitle = sectionTitles[number - 1];  // number is 1-based, while array index is 0-based
     }
 
     public void restoreActionBar() {
@@ -129,5 +127,11 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Intent prepareSignInActivityIntent(boolean fromNavigation) {
+        Intent intent = new Intent(this, PlusSignInActivity.class);
+        intent.putExtra(PlusSignInActivity.EXTRA_LAUNCHNEWACTIVITY, !fromNavigation);
+        return intent;
     }
 }

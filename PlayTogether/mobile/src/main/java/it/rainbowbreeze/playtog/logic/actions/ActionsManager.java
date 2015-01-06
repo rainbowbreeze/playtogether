@@ -23,12 +23,12 @@ public class ActionsManager extends RainbowActionsManager {
         mBackendManager = backendManager;
     }
 
-    public SubscribeClientToGcmAction SubscribeClientToGcm() {
-        return new SubscribeClientToGcmAction(mLogFacility, mBackendManager, this);
+    public SubscribeClientToGCMActions SubscribeClientToGcm() {
+        return new SubscribeClientToGCMActions(mLogFacility, mBackendManager, this);
     }
 
-    public UnsubscribeClientFromGCMAction UnsubscribeClientToGcm() {
-        return new UnsubscribeClientFromGCMAction(mLogFacility, mBackendManager, this);
+    public UnsubscribeClientFromGCMActions UnsubscribeClientToGcm() {
+        return new UnsubscribeClientFromGCMActions(mLogFacility, mBackendManager, this);
     }
 
 }

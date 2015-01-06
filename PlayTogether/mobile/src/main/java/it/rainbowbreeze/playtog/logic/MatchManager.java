@@ -73,7 +73,7 @@ public class MatchManager {
      * @return
      */
     public boolean canStartAGame() {
-        return mPlayerDao.countSelectedPlayers() > 2;
+        return mPlayerDao.countSelectedPlayers() == 4;
     }
 
     /**
@@ -130,8 +130,8 @@ public class MatchManager {
                     }
 
                     i++;
-                    mLogFacility.v(LOG_TAG, "Posting new player " + i);
-                    mBus.post(new PlayersUpdateEvent());
+                    //mLogFacility.v(LOG_TAG, "Posting new player " + i);
+                    //mBus.post(new PlayersUpdateEvent());
                 }
 
             }

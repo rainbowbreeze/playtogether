@@ -10,8 +10,10 @@ import dagger.Module;
 import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.data.PlayerDao;
+import it.rainbowbreeze.playtog.logic.BackendManager;
 import it.rainbowbreeze.playtog.logic.MainThreadBus;
 import it.rainbowbreeze.playtog.logic.MatchManager;
+import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 import it.rainbowbreeze.playtog.ui.MainActivity;
 import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
 import it.rainbowbreeze.playtog.ui.StartGameFragment;
@@ -81,6 +83,20 @@ public class MobileModule {
             @ForApplication Context appContext,
             ILogFacility logFacility) {
         return new PlayerDao(appContext, logFacility);
+    }
+
+    @Provides @Singleton
+    public ActionsManager provideActionsManager(
+            @ForApplication Context appContext,
+            ILogFacility logFacility,
+            BackendManager backendManager) {
+        return new ActionsManager(appContext, logFacility, backendManager);
+    }
+
+    @Provides @Singleton
+    public BackendManager provideBackendManager(
+            ILogFacility logFacility) {
+        return new BackendManager(logFacility);
     }
 
 }

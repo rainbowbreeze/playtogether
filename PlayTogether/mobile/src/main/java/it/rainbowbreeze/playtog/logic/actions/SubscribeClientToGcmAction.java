@@ -7,12 +7,12 @@ import it.rainbowbreeze.playtog.logic.BackendManager;
 /**
  * Created by alfredomorresi on 06/01/15.
  */
-public class UnsubscribeClientFromGcmActions extends RainbowActionsManager.BaseAction {
-    private static final String LOG_TAG = UnsubscribeClientFromGcmActions.class.getSimpleName();
+public class SubscribeClientToGcmAction extends RainbowActionsManager.BaseAction {
+    private static final String LOG_TAG = SubscribeClientToGcmAction.class.getSimpleName();
 
     private final BackendManager mBackendManager;
 
-    protected UnsubscribeClientFromGcmActions(IRainbowLogFacility logFacility, BackendManager backendManager, ActionsManager actionManager) {
+    protected SubscribeClientToGcmAction(IRainbowLogFacility logFacility, BackendManager backendManager, ActionsManager actionManager) {
         super(logFacility, actionManager);
         mBackendManager = backendManager;
     }
@@ -24,7 +24,7 @@ public class UnsubscribeClientFromGcmActions extends RainbowActionsManager.BaseA
 
     @Override
     protected void doYourStuff() {
-        mBackendManager.unregisterClient();
+        mBackendManager.registerClient();
     }
 
     @Override

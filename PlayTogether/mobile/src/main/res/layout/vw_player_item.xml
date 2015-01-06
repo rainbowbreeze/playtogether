@@ -14,7 +14,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        app:border_width="2dp"
+        app:border_width="1dp"
         app:border_color="#FF000000"
         android:src="@drawable/ic_launcher"
         android:layout_marginRight="10dp"

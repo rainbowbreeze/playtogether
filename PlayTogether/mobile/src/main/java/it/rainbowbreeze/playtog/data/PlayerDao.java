@@ -103,7 +103,7 @@ public class PlayerDao {
                 PlayerColumns.ACCEPTEDDATE + " DESC");
         Player player = null;
         while (c.moveToNext()) {
-            player = Player.fromCursor(c);
+            player = Player.createFrom(c);
             break;
         }
         c.close();

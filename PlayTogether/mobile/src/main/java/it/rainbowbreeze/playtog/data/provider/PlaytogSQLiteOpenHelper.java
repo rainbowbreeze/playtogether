@@ -29,7 +29,7 @@ public class PlaytogSQLiteOpenHelper extends SQLiteOpenHelper {
             + PlayerColumns.PICTUREURL + " TEXT, "
             + PlayerColumns.NAME + " TEXT NOT NULL, "
             + PlayerColumns.SOCIALID + " TEXT NOT NULL, "
-            + PlayerColumns.BACKENDID + " TEXT NOT NULL, "
+            + PlayerColumns.BACKENDID + " TEXT, "
             + PlayerColumns.SELECTED + " INTEGER NOT NULL DEFAULT '0', "
             + PlayerColumns.ACCEPTEDDATE + " INTEGER NOT NULL "
             + " );";

@@ -6,6 +6,7 @@ import android.support.v4.content.Loader;
 import com.squareup.otto.Bus;
 
 import it.rainbowbreeze.playtog.common.ILogFacility;
+import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.domain.Player;
 
@@ -20,11 +21,13 @@ public class MatchManager {
     private final ILogFacility mLogFacility;
     private final Bus mBus;
     private final PlayerDao mPlayerDao;
+    private final AppPrefsManager mAppPrefsManager;
     private boolean mStartedSearchForPlayers;
 
-    public MatchManager(ILogFacility logFacility, PlayerDao playerDao, Bus bus) {
+    public MatchManager(ILogFacility logFacility, PlayerDao playerDao, AppPrefsManager appPrefsManager, Bus bus) {
         mLogFacility = logFacility;
         mPlayerDao = playerDao;
+        mAppPrefsManager = appPrefsManager;
         mBus = bus;
         cleanGameStateAndData();
     }
@@ -152,8 +155,9 @@ public class MatchManager {
      * Creates a new player represented by the current user
      */
     private void addCurrentPlayer() {
-        //TODO
-        add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
+        Player player = mAppPrefsManager.getCurrentPlayer();
+        add(player);
+        //add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
     }
 
 

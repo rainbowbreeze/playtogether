@@ -27,6 +27,7 @@ import it.rainbowbreeze.playtog.R;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.domain.Player;
 
 /**
  * Android Google+ Quickstart activity.
@@ -223,6 +224,11 @@ public class PlusSignInActivity
 
         // Indicate that the sign in process is complete.
         mSignInProgress = STATE_DEFAULT;
+
+        // Saves new user information
+        // TODO maybe a service is more appropriate for async operation
+        mLogFacility.v(LOG_TAG, "Creating a player from current user " + currentUser.toString());
+        mAppPrefsManager.setCurrentPlayer(Player.createFrom(currentUser));
 
         // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
         //        .setResultCallback(this);

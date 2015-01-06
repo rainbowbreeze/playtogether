@@ -53,7 +53,7 @@ public class PlayersAdapter
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
         PlayerCursor playerCursor = new PlayerCursor(cursor);
-        Player player = Player.fromCursor(playerCursor);
+        Player player = Player.createFrom(playerCursor);
         holder.userName.setText(player.getName());
         holder.selected.setVisibility(player.isSelected() ? View.VISIBLE : View.INVISIBLE);
         if (!TextUtils.isEmpty(player.getPictureUrl())) {

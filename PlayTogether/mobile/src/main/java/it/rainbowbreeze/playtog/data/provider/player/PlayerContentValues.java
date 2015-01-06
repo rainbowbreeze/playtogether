@@ -54,11 +54,14 @@ public class PlayerContentValues extends AbstractContentValues {
 
 
     public PlayerContentValues putBackendid(String value) {
-        if (value == null) throw new IllegalArgumentException("value for backendid must not be null");
         mContentValues.put(PlayerColumns.BACKENDID, value);
         return this;
     }
 
+    public PlayerContentValues putBackendidNull() {
+        mContentValues.putNull(PlayerColumns.BACKENDID);
+        return this;
+    }
 
 
     public PlayerContentValues putSelected(boolean value) {

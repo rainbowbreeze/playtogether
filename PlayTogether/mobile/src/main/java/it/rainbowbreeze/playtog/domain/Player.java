@@ -1,5 +1,9 @@
 package it.rainbowbreeze.playtog.domain;
 
+import android.text.TextUtils;
+
+import com.google.android.gms.plus.model.people.Person;
+
 import java.util.Date;
 
 import it.rainbowbreeze.playtog.data.provider.player.PlayerContentValues;
@@ -56,7 +60,7 @@ public class Player {
     public String getSocialId() {
         return mSocialId;
     }
-    private Player setSocialId(String socialId) {
+    public Player setSocialId(String socialId) {
         mSocialId = socialId;
         return this;
     }
@@ -74,12 +78,12 @@ public class Player {
     public Date getAcceptedDate() {
         return mAcceptedDate;
     }
-    private Player setAcceptedDate(Date backendId) {
+    public Player setAcceptedDate(Date backendId) {
         mAcceptedDate = backendId;
         return this;
     }
 
-    public static Player fromCursor(PlayerCursor c) {
+    public static Player createFrom(PlayerCursor c) {
         return new Player()
                 .setAcceptedDate(c.getAccepteddate())
                 .setBackendId(c.getBackendid())
@@ -88,6 +92,28 @@ public class Player {
                 .setPictureUrl(c.getPictureurl())
                 .setSelected(c.getSelected())
                 .setSocialId(c.getSocialid());
+    }
+
+    public static Player createFrom(Person person) {
+        if (null == person) return null;
+        Player player = new Player();
+        player.setBackendId("");
+        if (!TextUtils.isEmpty(person.getDisplayName())) {
+            player.setName(person.getDisplayName());
+        } else if (null != person.getName() && !TextUtils.isEmpty(person.getName().toString())) {
+            player.setName(person.getName().toString());
+        } else if (!TextUtils.isEmpty(person.getNickname())) {
+            player.setName(person.getNickname());
+        } else {
+            player.setName("Unknown name");
+        }
+        if (null != person.getImage()) {
+            player.setPictureUrl(person.getImage().getUrl());
+        }
+        player
+                .setSelected(false)
+                .setSocialId(person.getId());
+        return player;
     }
 
     public void fillContentValues(PlayerContentValues values) {

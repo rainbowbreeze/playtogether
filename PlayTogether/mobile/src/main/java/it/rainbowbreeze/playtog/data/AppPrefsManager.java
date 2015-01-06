@@ -2,8 +2,11 @@ package it.rainbowbreeze.playtog.data;
 
 import android.content.Context;
 
+import java.util.Date;
+
 import it.rainbowbreeze.libs.data.RainbowAppPrefsManager;
 import it.rainbowbreeze.playtog.common.ILogFacility;
+import it.rainbowbreeze.playtog.domain.Player;
 
 /**
  *
@@ -30,7 +33,6 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
         setGPlusLoginDone(false);
     }
 
-    // Look at the xml file!
     private static final String PREF_GPLUS_LOGIN_DONE = "pref_gpluslogindone";
     public boolean isGPlusLoginDone() {
         return mAppPreferences.getBoolean(PREF_GPLUS_LOGIN_DONE, false);
@@ -41,4 +43,54 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
         saveIfNeeded();
         return this;
     }
+
+    private static final String PREF_GPLUS_BACKENDID = "pref_gplusBackendId";
+    private static final String PREF_GPLUS_NAME = "pref_gplusName";
+    private static final String PREF_GPLUS_PICTUREURL = "pref_gplusPictureUrl";
+    private static final String PREF_GPLUS_SOCIALID = "pref_gplusSocialId";
+
+    /**
+     * Creates a player using current logged user data
+     * @return
+     */
+    public Player getCurrentPlayer() {
+        Player player = new Player()
+                .setAcceptedDate(new Date())
+                .setBackendId(mAppPreferences.getString(PREF_GPLUS_BACKENDID, NULL_STRING))
+                .setName(mAppPreferences.getString(PREF_GPLUS_NAME, NULL_STRING))
+                .setPictureUrl(mAppPreferences.getString(PREF_GPLUS_PICTUREURL, NULL_STRING))
+                .setSelected(true)
+                .setSocialId(mAppPreferences.getString(PREF_GPLUS_SOCIALID, NULL_STRING));
+        return player;
+    }
+
+    /**
+     * Save current user data in the format of a player
+     * @param player
+     * @return
+     */
+    public AppPrefsManager setCurrentPlayer(Player player) {
+        openSharedEditor();
+        mSharedEditor.putString(PREF_GPLUS_BACKENDID, player.getBackendId());
+        mSharedEditor.putString(PREF_GPLUS_NAME, player.getName());
+        mSharedEditor.putString(PREF_GPLUS_PICTUREURL, player.getPictureUrl());
+        mSharedEditor.putString(PREF_GPLUS_SOCIALID, player.getSocialId());
+        saveIfNeeded();
+        return this;
+    }
+
+    /**
+     * Reset all the information related to current logged user, and player
+     * @return
+     */
+    public AppPrefsManager resetCurrentPlayer() {
+        openSharedEditor();
+        mSharedEditor.putString(PREF_GPLUS_BACKENDID, NULL_STRING);
+        mSharedEditor.putString(PREF_GPLUS_NAME, NULL_STRING);
+        mSharedEditor.putString(PREF_GPLUS_PICTUREURL, NULL_STRING);
+        mSharedEditor.putString(PREF_GPLUS_SOCIALID, NULL_STRING);
+        saveIfNeeded();
+        return this;
+    }
+
 }

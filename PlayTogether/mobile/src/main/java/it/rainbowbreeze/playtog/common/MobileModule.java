@@ -66,8 +66,9 @@ public class MobileModule {
     public MatchManager provideMatchManager(
             ILogFacility logFacility,
             PlayerDao playerDao,
+            AppPrefsManager appPrefsManager,
             Bus bus) {
-        return new MatchManager(logFacility, playerDao, bus);
+        return new MatchManager(logFacility, playerDao, appPrefsManager, bus);
     }
 
     @Provides @Singleton

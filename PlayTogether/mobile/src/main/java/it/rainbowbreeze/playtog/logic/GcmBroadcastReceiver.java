@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger.getLogger("AAAAAAAA").log(Level.INFO, "Message arrived");
         // Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),
                 GcmIntentService.class.getName());

@@ -54,6 +54,7 @@ public class RegistrationEndpoint {
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
         ofy().save().entity(record).now();
+        log.info("Registered new device: " + regId);
     }
 
     /**
@@ -69,6 +70,7 @@ public class RegistrationEndpoint {
             return;
         }
         ofy().delete().entity(record).now();
+        log.info("Unregistered device: " + regId);
     }
 
     /**

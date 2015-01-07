@@ -31,7 +31,14 @@ import static it.rainbowbreeze.playtog.OfyService.ofy;
  * authentication! If this app is deployed, anyone can access this endpoint! If
  * you'd like to add authentication, take a look at the documentation.
  */
-@Api(name = "messaging", version = "v1", namespace = @ApiNamespace(ownerDomain = "playtog.rainbowbreeze.it", ownerName = "playtog.rainbowbreeze.it", packagePath = ""))
+@Api(
+        name = "messaging",
+        version = "v1",
+        namespace = @ApiNamespace(
+                ownerDomain = "playtog.rainbowbreeze.it",
+                ownerName = "playtog.rainbowbreeze.it",
+                packagePath = "")
+)
 public class MessagingEndpoint {
     private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
 
@@ -57,6 +64,7 @@ public class MessagingEndpoint {
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+        log.info("Sending to " + records.size() + " clients message " + message);
         for (RegistrationRecord record : records) {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {

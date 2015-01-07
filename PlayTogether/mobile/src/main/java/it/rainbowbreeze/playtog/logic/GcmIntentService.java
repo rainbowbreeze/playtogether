@@ -33,7 +33,6 @@ public class GcmIntentService extends IntentService {
             // Since we're not using two way messaging, this is all we really to check for
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Logger.getLogger("GCM_RECEIVED").log(Level.INFO, extras.toString());
-
                 showToast(extras.getString("message"));
             }
         }

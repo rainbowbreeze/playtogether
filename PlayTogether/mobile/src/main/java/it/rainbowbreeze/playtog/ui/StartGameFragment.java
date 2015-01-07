@@ -57,7 +57,6 @@ public class StartGameFragment
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO put in background thread
                 mMatchManager.togglePlayerSelection(id);
                 updateViewsStatus();
             }

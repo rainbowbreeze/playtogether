@@ -58,7 +58,6 @@ public class GameManager {
     public void cleanGameStateAndData() {
         mStartedSearchForPlayers = false;
         mPlayerDao.deleteAll();
-        addCurrentPlayer();
     }
 
     /**
@@ -104,9 +103,10 @@ public class GameManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-                //TODO: launch the backend command for starting the search
                 mBackendHelper.searchForPlayers();
+
+                // Add the current player as first player of the list
+                add(mAppPrefsManager.getCurrentPlayer().setSelected(true));
 
                 for (int i=0; i<5; i++) {
                     try {
@@ -152,15 +152,5 @@ public class GameManager {
 
         //TODO Notifies the backend about the start of the game
     }
-
-    /**
-     * Creates a new player represented by the current user
-     */
-    private void addCurrentPlayer() {
-        Player player = mAppPrefsManager.getCurrentPlayer();
-        add(player);
-        //add(new Player().setName("Alfredo - player 0").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
-    }
-
 
 }

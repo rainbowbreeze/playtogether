@@ -53,7 +53,6 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
                 .setBackendId(mAppPreferences.getString(PREF_GPLUS_BACKENDID, NULL_STRING))
                 .setName(mAppPreferences.getString(PREF_GPLUS_NAME, NULL_STRING))
                 .setPictureUrl(mAppPreferences.getString(PREF_GPLUS_PICTUREURL, NULL_STRING))
-                .setSelected(true)
                 .setSocialId(mAppPreferences.getString(PREF_GPLUS_SOCIALID, NULL_STRING));
         return player;
     }

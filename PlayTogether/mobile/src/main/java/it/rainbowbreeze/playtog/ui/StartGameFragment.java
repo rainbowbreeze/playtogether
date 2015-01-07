@@ -68,6 +68,7 @@ public class StartGameFragment
             @Override
             public void onClick(View v) {
                 mGameManager.startSearchingForPlayer();
+                updateViewsStatus();
             }
         });
         mBtnConfirmGame = (Button) rootView.findViewById(R.id.startgame_btnConfirmGame);
@@ -75,6 +76,7 @@ public class StartGameFragment
             @Override
             public void onClick(View v) {
                 mGameManager.startTheGame();
+                updateViewsStatus();
             }
         });
         updateViewsStatus();

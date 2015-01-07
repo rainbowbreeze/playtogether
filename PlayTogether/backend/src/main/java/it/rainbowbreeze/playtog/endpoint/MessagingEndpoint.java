@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 
 import it.rainbowbreeze.playtog.domain.RegistrationRecord;
+import it.rainbowbreeze.playtog.logic.GcmMessageHelper;
 
 import static it.rainbowbreeze.playtog.OfyService.ofy;
 
@@ -67,38 +68,15 @@ public class MessagingEndpoint {
         if (message.length() > 1000) {
             message = message.substring(0, 1000) + "[...]";
         }
-        Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder()
                 .addData(EXTRA_MESSAGE, message)
                 .addData(EXTRA_GCMACTION_TYPE, "SearchForPlayers")
-                // 113100264827945975278 - Play Together
-                // 108670469644954045753 - User test 1
+                        // 113100264827945975278 - Play Together
+                        // 108670469644954045753 - User test 1
                 .addData(EXTRA_PLAYER_ID, "108670469644954045753")
                 .build();
 
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
-        log.info("Sending to " + records.size() + " clients message " + message);
-        for (RegistrationRecord record : records) {
-            Result result = sender.send(msg, record.getRegId(), 5);
-            if (result.getMessageId() != null) {
-                log.info("Message sent to " + record.getRegId());
-                String canonicalRegId = result.getCanonicalRegistrationId();
-                if (canonicalRegId != null) {
-                    // if the regId changed, we have to update the datastore
-                    log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
-                    record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
-                }
-            } else {
-                String error = result.getErrorCodeName();
-                if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-                    log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
-                    // if the device is no longer registered with Gcm, remove it from the datastore
-                    ofy().delete().entity(record).now();
-                } else {
-                    log.warning("Error when sending message : " + error);
-                }
-            }
-        }
+        GcmMessageHelper messageHelper = new GcmMessageHelper();
+        messageHelper.sendMessage(msg);
     }
 }

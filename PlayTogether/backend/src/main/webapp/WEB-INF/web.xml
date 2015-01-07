@@ -13,8 +13,8 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>it.rainbowbreeze.playtog.RegistrationEndpoint,
-                it.rainbowbreeze.playtog.MessagingEndpoint
+            <param-value>it.rainbowbreeze.playtog.endpoint.RegistrationEndpoint,
+                it.rainbowbreeze.playtog.endpoint.MessagingEndpoint
             </param-value>
         </init-param>
     </servlet>

@@ -1,4 +1,4 @@
-package it.rainbowbreeze.playtog;
+package it.rainbowbreeze.playtog.domain;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

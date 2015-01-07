@@ -4,7 +4,7 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/GcmEndpoints
 */
 
-package it.rainbowbreeze.playtog;
+package it.rainbowbreeze.playtog.endpoint;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
+
+import it.rainbowbreeze.playtog.domain.RegistrationRecord;
 
 import static it.rainbowbreeze.playtog.OfyService.ofy;
 

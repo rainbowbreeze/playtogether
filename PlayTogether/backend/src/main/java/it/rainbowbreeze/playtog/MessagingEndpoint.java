@@ -47,6 +47,10 @@ public class MessagingEndpoint {
      */
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
+    private static final String EXTRA_MESSAGE = "message";
+    private static final String EXTRA_GCMACTION_TYPE = "gcmActionType";
+    private static final String EXTRA_PLAYER_ID = "playerId";
+
     /**
      * Send to the first 10 devices (You can modify this to send to any number of devices or a specific device)
      *
@@ -62,7 +66,14 @@ public class MessagingEndpoint {
             message = message.substring(0, 1000) + "[...]";
         }
         Sender sender = new Sender(API_KEY);
-        Message msg = new Message.Builder().addData("message", message).build();
+        Message msg = new Message.Builder()
+                .addData(EXTRA_MESSAGE, message)
+                .addData(EXTRA_GCMACTION_TYPE, "SearchForPlayers")
+                // 113100264827945975278 - Play Together
+                // 108670469644954045753 - User test 1
+                .addData(EXTRA_PLAYER_ID, "108670469644954045753")
+                .build();
+
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
         log.info("Sending to " + records.size() + " clients message " + message);
         for (RegistrationRecord record : records) {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -31,6 +31,7 @@ import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.domain.Player;
+import it.rainbowbreeze.playtog.logic.GPlusHelper;
 import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 
 /**
@@ -57,7 +58,7 @@ import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
  */
 
 public class PlusSignInActivity
-        extends FragmentActivity
+        extends ActionBarActivity
         implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
     private static final String LOG_TAG = PlusSignInActivity.class.getSimpleName();
 
@@ -111,6 +112,7 @@ public class PlusSignInActivity
     @Inject ILogFacility mLogFacility;
     @Inject AppPrefsManager mAppPrefsManager;
     @Inject ActionsManager mActionsManager;
+    @Inject GPlusHelper mGPlusHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -226,16 +228,16 @@ public class PlusSignInActivity
         mRevokeButton.setEnabled(true);
 
         // Retrieve some profile information to personalize our app for the user.
-        Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        Player player = mGPlusHelper.getLogged(mGoogleApiClient);
 
         mStatus.setText(String.format(
                 getResources().getString(R.string.plussignin_signedInAs),
-                currentUser.getDisplayName()));
-        if (null != currentUser.getImage() && !TextUtils.isEmpty(currentUser.getImage().getUrl())) {
+                player.getName()));
+        if (!TextUtils.isEmpty(player.getPictureUrl())) {
             mImgProfile.setVisibility(View.VISIBLE);
             mSignInButton.setVisibility(View.GONE);
             Picasso.with(getApplicationContext())
-                    .load(currentUser.getImage().getUrl())
+                    .load(player.getPictureUrl())
                     .noFade()  // Required by CircleImageView
                     .into(mImgProfile);
         } else {
@@ -248,8 +250,8 @@ public class PlusSignInActivity
 
         // Saves new user information
         // TODO move from here
-        mLogFacility.v(LOG_TAG, "Creating a player from current user " + currentUser.toString());
-        mAppPrefsManager.setCurrentPlayer(Player.createFrom(currentUser));
+        mLogFacility.v(LOG_TAG, "Creating a player from current user " + player.getName() + " - GPlus Id:" + player.getSocialId());
+        mAppPrefsManager.setCurrentPlayer(player);
         mActionsManager.SubscribeClientToGcm().executeAsync();
 
         // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)

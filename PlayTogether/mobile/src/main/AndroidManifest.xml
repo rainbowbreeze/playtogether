@@ -32,11 +32,6 @@
 
         <!-- Activities -->
         <activity
-            android:name=".ui.PlusSignInActivity"
-            android:label="@string/plussignin_title" >
-        </activity>
-
-        <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden" >
@@ -44,6 +39,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.PlusSignInActivity"
+            android:label="@string/plussignin_title" >
+        </activity>
+
+        <activity
+            android:name=".ui.JoinGameActivity"
+            android:label="@string/joingame_title" >
         </activity>
 
         <!-- Providers -->

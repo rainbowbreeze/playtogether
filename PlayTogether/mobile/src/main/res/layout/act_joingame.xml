@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dip"
+    tools:context="it.rainbowbreeze.playtog.ui.JoinGameActivity"
+>
+
+    <LinearLayout
+        android:id="@+id/joingame_layButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+    >
+
+        <Button
+            android:id="@+id/joingame_btnAccept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/joingame_btnAccept"
+            />
+
+        <Button
+            android:id="@+id/joingame_btnRefuse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/joingame_btnRefuse"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/joingame_layButtons"
+        android:gravity="center_vertical"
+    >
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/joingame_imgProfile"
+            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_height="@dimen/navigation_drawer_width"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            app:border_width="2dp"
+            app:border_color="#FF000000"
+            android:src="@drawable/ic_launcher"
+        />
+
+        <TextView
+            android:id="@+id/joingame_lblMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/joingame_imgProfile"
+            android:textSize="20dp"
+            android:gravity="center"
+        />
+    </RelativeLayout>
+
+</RelativeLayout>

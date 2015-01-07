@@ -20,29 +20,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="20dip"
+    android:orientation="vertical"
     tools:context="it.rainbowbreeze.playtog.ui.PlusSignInActivity"
 >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/plussignin_imgProfile"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="@dimen/navigation_drawer_width"
-        android:layout_margin="10dp"
-        app:border_width="2dp"
-        app:border_color="#FF000000"
-        android:src="@drawable/ic_launcher"
-    />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/plussignin_btnSignIn"
+    <RelativeLayout
+        android:id="@+id/plussignin_layProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dip"
-        android:enabled="false"
-    />
+    >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/plussignin_imgProfile"
+            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_height="@dimen/navigation_drawer_width"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            app:border_width="2dp"
+            app:border_color="#FF000000"
+            android:src="@drawable/ic_launcher"
+            />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/plussignin_btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dip"
+            android:enabled="false"
+        />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/plussignin_btnSignOut"

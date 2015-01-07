@@ -11,10 +11,13 @@ import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.logic.BackendHelper;
+import it.rainbowbreeze.playtog.logic.GPlusCommunicationService;
 import it.rainbowbreeze.playtog.logic.GPlusHelper;
+import it.rainbowbreeze.playtog.logic.GcmIntentService;
 import it.rainbowbreeze.playtog.logic.MainThreadBus;
 import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
+import it.rainbowbreeze.playtog.ui.JoinGameActivity;
 import it.rainbowbreeze.playtog.ui.MainActivity;
 import it.rainbowbreeze.playtog.ui.PlusSignInActivity;
 import it.rainbowbreeze.playtog.ui.StartGameFragment;
@@ -26,18 +29,21 @@ import it.rainbowbreeze.playtog.ui.StartGameFragment;
 @Module (
         injects = {
                 MyApp.class,
+                JoinGameActivity.class,
                 MainActivity.class,
                 PlusSignInActivity.class,
                 StartGameFragment.class,
+                GcmIntentService.class,
+                GPlusCommunicationService.class,
         },
         // Forces validates modules and injections at compile time.
         // If true, includes also additional modules that will complete the dependency graph
         //  using the includes statement for the class included in the injects statement
         complete = true,
-        // True because it declares @Provides not used inside the class, but outside.
+        // OLD comment: True because it declares @Provides not used inside the class, but outside.
         // Once the code is finished, it should be possible to set to false and have
         //  all the consuming classes in the injects statement
-        library = true
+        library = false
 )
 public class MobileModule {
     private final Context mAppContent;

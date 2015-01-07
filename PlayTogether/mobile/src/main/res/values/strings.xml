@@ -29,5 +29,9 @@
     <string name="startgame_title">Google+ Sign in</string>
     <string name="startgame_btnSearchForPlayers">Call for players</string>
     <string name="startgame_btnConfirmGame">Start the game!</string>
+    <string name="joingame_title">Join the game</string>
+    <string name="joingame_btnAccept">Accept!</string>
+    <string name="joingame_btnRefuse">Refuse :(</string>
+    <string name="joingame_lblMessage">%1$s has asked to join the game %2$s</string>
 
 </resources>

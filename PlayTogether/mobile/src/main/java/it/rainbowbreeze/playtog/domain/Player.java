@@ -108,6 +108,8 @@ public class Player {
         }
         if (null != person.getImage()) {
             player.setPictureUrl(person.getImage().getUrl());
+            //Workaround to obtain larger profile picture
+            player.setPictureUrl(player.getPictureUrl().replace("?sz=50", "?sz=300"));
         }
         player
                 .setSelected(false)

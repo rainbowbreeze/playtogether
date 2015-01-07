@@ -28,7 +28,7 @@ public class GcmMessageHelper {
     public void sendMessage(Message message) throws IOException {
         Sender sender = new Sender(API_KEY);
 
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(30).list();
         log.info("Sending to " + records.size() + " clients message " + message);
         for (RegistrationRecord record : records) {
             Result result = sender.send(message, record.getRegId(), 5);

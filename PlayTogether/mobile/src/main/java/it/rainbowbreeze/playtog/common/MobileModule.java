@@ -13,9 +13,9 @@ import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.logic.BackendHelper;
 import it.rainbowbreeze.playtog.logic.GPlusCommunicationService;
 import it.rainbowbreeze.playtog.logic.GPlusHelper;
+import it.rainbowbreeze.playtog.logic.GameManager;
 import it.rainbowbreeze.playtog.logic.GcmIntentService;
 import it.rainbowbreeze.playtog.logic.MainThreadBus;
-import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 import it.rainbowbreeze.playtog.ui.JoinGameActivity;
 import it.rainbowbreeze.playtog.ui.MainActivity;
@@ -72,12 +72,13 @@ public class MobileModule {
     }
 
     @Provides @Singleton
-    public MatchManager provideMatchManager(
+    public GameManager provideGameManager(
             ILogFacility logFacility,
             PlayerDao playerDao,
             AppPrefsManager appPrefsManager,
+            BackendHelper backendHelper,
             Bus bus) {
-        return new MatchManager(logFacility, playerDao, appPrefsManager, bus);
+        return new GameManager(logFacility, playerDao, appPrefsManager, backendHelper, bus);
     }
 
     @Provides @Singleton

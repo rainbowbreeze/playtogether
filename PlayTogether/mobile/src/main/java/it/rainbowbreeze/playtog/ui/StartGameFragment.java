@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import it.rainbowbreeze.playtog.R;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
-import it.rainbowbreeze.playtog.logic.MatchManager;
+import it.rainbowbreeze.playtog.logic.GameManager;
 
 /**
  * Created by alfredomorresi on 02/01/15.
@@ -32,7 +32,7 @@ public class StartGameFragment
     private static final String LOG_TAG = StartGameFragment.class.getSimpleName();
 
     @Inject ILogFacility mLogFacility;
-    @Inject MatchManager mMatchManager;
+    @Inject GameManager mGameManager;
     @Inject Bus mBus;
     private ListView mListView;
     private PlayersAdapter mPlayersAdapter;
@@ -57,7 +57,7 @@ public class StartGameFragment
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mMatchManager.togglePlayerSelection(id);
+                mGameManager.togglePlayerSelection(id);
                 updateViewsStatus();
             }
         });
@@ -67,14 +67,14 @@ public class StartGameFragment
         mBtnSearchForPlayers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMatchManager.startSearchingForPlayer();
+                mGameManager.startSearchingForPlayer();
             }
         });
         mBtnConfirmGame = (Button) rootView.findViewById(R.id.startgame_btnConfirmGame);
         mBtnConfirmGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMatchManager.startTheGame();
+                mGameManager.startTheGame();
             }
         });
         updateViewsStatus();
@@ -101,13 +101,13 @@ public class StartGameFragment
     }
 
     private void updateViewsStatus() {
-        mBtnSearchForPlayers.setEnabled(mMatchManager.canSearchForPlayers());
-        mBtnConfirmGame.setEnabled(mMatchManager.canStartAGame());
+        mBtnSearchForPlayers.setEnabled(mGameManager.canSearchForPlayers());
+        mBtnConfirmGame.setEnabled(mGameManager.canStartAGame());
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return mMatchManager.getPlayersForTheGame();
+        return mGameManager.getPlayersForTheGame();
     }
 
     @Override

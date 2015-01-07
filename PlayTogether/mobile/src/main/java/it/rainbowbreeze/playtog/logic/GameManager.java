@@ -15,19 +15,21 @@ import it.rainbowbreeze.playtog.domain.Player;
  *
  * Created by alfredomorresi on 02/01/15.
  */
-public class MatchManager {
-    private static final String LOG_TAG = MatchManager.class.getSimpleName();
+public class GameManager {
+    private static final String LOG_TAG = GameManager.class.getSimpleName();
 
     private final ILogFacility mLogFacility;
     private final Bus mBus;
     private final PlayerDao mPlayerDao;
+    private final BackendHelper mBackendHelper;
     private final AppPrefsManager mAppPrefsManager;
     private boolean mStartedSearchForPlayers;
 
-    public MatchManager(ILogFacility logFacility, PlayerDao playerDao, AppPrefsManager appPrefsManager, Bus bus) {
+    public GameManager(ILogFacility logFacility, PlayerDao playerDao, AppPrefsManager appPrefsManager, BackendHelper backendHelper, Bus bus) {
         mLogFacility = logFacility;
         mPlayerDao = playerDao;
         mAppPrefsManager = appPrefsManager;
+        mBackendHelper = backendHelper;
         mBus = bus;
         cleanGameStateAndData();
     }
@@ -97,15 +99,16 @@ public class MatchManager {
     public void startSearchingForPlayer() {
         cleanGameStateAndData();  // Just to be sure!
 
-        //TODO: launch the backend command for starting the search
-
         mStartedSearchForPlayers = true;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int i=0;
-                while (i<5) {
+
+                //TODO: launch the backend command for starting the search
+                mBackendHelper.searchForPlayers();
+
+                for (int i=0; i<5; i++) {
                     try {
                         Thread.sleep(1500);
                     } catch (InterruptedException e) {
@@ -113,23 +116,21 @@ public class MatchManager {
                     }
                     switch (i) {
                         case 0:
-                            add(new Player().setName("Alfredo - player 1").setSelected(false).setPictureUrl("http://lorempixel.com/400/400/sports"));
+                            add(new Player().setName("Stefano Manca").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-nmitA-hkSEQ/Uq2f8lNFZ6I/AAAAAAAAIUo/81UQRcbPRnM/s788-no/54ef821b-b16c-44d6-afac-61a835a7a2bf"));
                             break;
                         case 1:
-                            add(new Player().setName("Carla - player 2").setSelected(false).setPictureUrl("http://lorempixel.com/400/400/food"));
+                            add(new Player().setName("Alessandra Pugin").setSelected(false).setPictureUrl("https://lh3.googleusercontent.com/-Fymin8OPcGA/UrbfjUs7GEI/AAAAAAAAHxc/8FTjOYsnI9c/w480-h480/41356_484793799347_4458943_n.jpg"));
                             break;
                         case 2:
-                            add(new Player().setName("Marco - player 3").setSelected(true).setPictureUrl("http://lorempixel.com/400/400"));
+                            add(new Player().setName("Fabio Ercolani").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-tIbufLRCQes/Tj-ceTA9C1I/AAAAAAAAG2Q/SZIq-bZCRv0/w790-h788-no/Nina%2B021.jpg"));
                             break;
                         case 3:
-                            add(new Player().setName("Veronica - player 4").setSelected(false).setPictureUrl("http://lorempixel.com/400/400/nature"));
+                            add(new Player().setName("Valentina Frassi").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
                             break;
                         default:
-                            add(new Player().setName("Luigi - player " + i).setSelected(true));
+                            add(new Player().setName("Alessandro Antiga" + i).setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-txy6s8_3HSU/UjsrZJT6jkI/AAAAAAAAHuw/xdSVu4KCH8U/s512-no/IMG_20130919_130416.jpg"));
                             break;
                     }
-
-                    i++;
                     //mLogFacility.v(LOG_TAG, "Posting new player " + i);
                     //mBus.post(new PlayersUpdateEvent());
                 }
@@ -144,6 +145,7 @@ public class MatchManager {
      */
     public void startTheGame() {
         mStartedSearchForPlayers = false;
+        mPlayerDao.deleteAll();
 
         //TODO Sends notification to selected and not selected players
 

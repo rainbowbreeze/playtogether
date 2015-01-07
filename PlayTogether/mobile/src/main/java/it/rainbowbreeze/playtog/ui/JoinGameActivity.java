@@ -65,6 +65,7 @@ public class JoinGameActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(JoinGameActivity.this, "Accepted", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
         button = (Button) findViewById(R.id.joingame_btnRefuse);
@@ -72,6 +73,7 @@ public class JoinGameActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(JoinGameActivity.this, "Refused", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

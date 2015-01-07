@@ -61,6 +61,7 @@ public class GcmIntentService extends IntentService {
                 String matchType = extras.getString(EXTRA_GCMACTION_TYPE);
                 String gplusId = extras.getString(EXTRA_PLAYER_GPLUS_ID);
                 if (GCMACTION_SEARCH_FOR_PLAYERS.equalsIgnoreCase(matchType)) {
+                    //TODO checks if the request comes from the same device (check the player id)
                     mLogFacility.v(LOG_TAG, gplusId + " launched a search for players");
                     Intent intent2 = new Intent(getApplicationContext(), GPlusCommunicationService.class);
                     intent2.setAction(GPlusCommunicationService.ACTION_SEARCH_FOR_PLAYERS);

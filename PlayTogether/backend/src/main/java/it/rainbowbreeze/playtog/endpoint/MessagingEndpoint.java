@@ -6,23 +6,17 @@
 
 package it.rainbowbreeze.playtog.endpoint;
 
-import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import it.rainbowbreeze.playtog.domain.RegistrationRecord;
+import it.rainbowbreeze.playtog.common.Bag;
 import it.rainbowbreeze.playtog.logic.GcmMessageHelper;
-
-import static it.rainbowbreeze.playtog.OfyService.ofy;
 
 /**
  * An endpoint to send messages to devices registered with the backend
@@ -50,10 +44,6 @@ public class MessagingEndpoint {
      */
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
-    private static final String EXTRA_MESSAGE = "message";
-    private static final String EXTRA_GCMACTION_TYPE = "gcmActionType";
-    private static final String EXTRA_PLAYER_ID = "playerId";
-
     /**
      * Send to the first 10 devices (You can modify this to send to any number of devices or a specific device)
      *
@@ -69,11 +59,11 @@ public class MessagingEndpoint {
             message = message.substring(0, 1000) + "[...]";
         }
         Message msg = new Message.Builder()
-                .addData(EXTRA_MESSAGE, message)
-                .addData(EXTRA_GCMACTION_TYPE, "SearchForPlayers")
+                .addData(Bag.EXTRA_MESSAGE, message)
+                .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_SEARCH_FOR_PLAYERS)
                         // 113100264827945975278 - Play Together
                         // 108670469644954045753 - User test 1
-                .addData(EXTRA_PLAYER_ID, "108670469644954045753")
+                .addData(Bag.EXTRA_PLAYER_ID, "108670469644954045753")
                 .build();
 
         GcmMessageHelper messageHelper = new GcmMessageHelper();

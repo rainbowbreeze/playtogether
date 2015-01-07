@@ -14,6 +14,8 @@ import java.io.IOException;
 
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.domain.Player;
+import it.rainbowbreeze.playtog.game.Game;
 import it.rainbowbreeze.playtog.registration.Registration;
 
 /**
@@ -25,6 +27,8 @@ public class BackendHelper {
     private final ILogFacility mLogFacility;
     private final AppPrefsManager mAppPrefsManager;
     private Registration mRegService = null;
+    private Game mGameService = null;
+
     protected final Context mAppContext;
     private static final String SENDER_ID = "681581883585";  // Project ID of the backend app
 
@@ -80,6 +84,19 @@ public class BackendHelper {
         }
     }
 
+    public void searchForPlayers() {
+        mLogFacility.v(LOG_TAG, "Searching for new players");
+        setupGame();
+
+        Player player = mAppPrefsManager.getCurrentPlayer();
+        try {
+            mGameService.searchForPlayers(player.getSocialId(), "IT-MIL-CON-4-FOSBALL").execute();
+            mLogFacility.v(LOG_TAG, "Asked players for a new game");
+        } catch (IOException ex) {
+            mLogFacility.e(LOG_TAG, "Error searching for new players", ex);
+        }
+    }
+
 
     /**
      * Setting up the registration object for communicating with the backend server
@@ -109,4 +126,34 @@ public class BackendHelper {
             mRegService = builder.build();
         }
     }
+
+    /**
+     * Setting up the registration object for communicating with the backend server
+     */
+    private void setupGame() {
+        if (mGameService == null) {
+            Game.Builder builder = new Game.Builder(AndroidHttp.newCompatibleTransport(),
+                    new AndroidJsonFactory(), null);
+
+            //Run in the emulator, connect to local server
+            if (Build.FINGERPRINT.startsWith("generic")) {
+                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
+                // otherwise they can be skipped
+                builder
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+                                    throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                // Run on device, connect on real server
+            } else {
+                builder.setRootUrl("https://play-together-2015.appspot.com/_ah/api/");
+            }
+            mGameService = builder.build();
+        }
+    }
+
 }

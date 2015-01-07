@@ -39,7 +39,6 @@ import static it.rainbowbreeze.playtog.OfyService.ofy;
                 packagePath = "")
 )
 public class RegistrationEndpoint {
-
     private static final Logger log = Logger.getLogger(RegistrationEndpoint.class.getName());
 
     /**

@@ -37,7 +37,7 @@
         android:layout_toLeftOf="@id/playeritem_imgSelected"
         android:layout_centerVertical="true"
         android:textSize="25dp"
-        android:textColor="#CCCCCC"
+        android:textColor="#999999"
     />
 
 </RelativeLayout>

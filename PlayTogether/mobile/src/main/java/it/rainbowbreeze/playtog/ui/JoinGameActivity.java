@@ -2,6 +2,7 @@ package it.rainbowbreeze.playtog.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -75,5 +76,20 @@ public class JoinGameActivity extends ActionBarActivity {
                 Toast.makeText(JoinGameActivity.this, "Refused", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (null == savedInstanceState) {
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            vibrator.vibrate(1000);
+        /*
+        if(Build.VERSION.SDK_INT >= 21) {
+            AudioAttributes.Builder attrs = new AudioAttributes.Builder();
+            attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
+            attrs.setUsage(AudioAttributes.USAGE_ALARM);
+            vibrator.vibrate(1000, attrs.build());
+        } else {
+            vibrator.vibrate(1000);
+        }
+         */
+        }
     }
 }

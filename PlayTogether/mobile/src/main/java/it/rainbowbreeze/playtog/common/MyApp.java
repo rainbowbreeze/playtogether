@@ -11,7 +11,7 @@ import dagger.ObjectGraph;
 import it.rainbowbreeze.playtog.BuildConfig;
 
 /**
- * This file is part of KeepMoving. KeepMoving is free software: you can
+ * This file is part of Play Together. Play Together is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, version 2.
  * <p/>
@@ -26,7 +26,7 @@ import it.rainbowbreeze.playtog.BuildConfig;
  * <p/>
  * Copyright Alfredo Morresi
  * <p/>
- * Created by Alfredo "Rainbowbreeze" Morresi on 15/06/14.
+ * Created by Alfredo "Rainbowbreeze" Morresi on 12/20/14.
  */
 
 /**

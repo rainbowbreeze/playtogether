@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -228,6 +227,7 @@ public class PlusSignInActivity
         mRevokeButton.setEnabled(true);
 
         // Retrieve some profile information to personalize our app for the user.
+        //TODO: do in background
         Player player = mGPlusHelper.getLogged(mGoogleApiClient);
 
         mStatus.setText(String.format(

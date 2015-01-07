@@ -14,6 +14,8 @@ import javax.inject.Inject;
 
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
+import it.rainbowbreeze.playtog.data.AppPrefsManager;
+import it.rainbowbreeze.playtog.domain.Player;
 
 /**
  * Created by alfredomorresi on 07/01/15.
@@ -32,6 +34,7 @@ public class GcmIntentService extends IntentService {
     private static final String GCMACTION_NEW_USER_FOR_GAME = "NewUserForGame";
 
     @Inject ILogFacility mLogFacility;
+    @Inject AppPrefsManager mAppPrefsManager;
 
     public GcmIntentService() {
         super(LOG_TAG);
@@ -61,12 +64,17 @@ public class GcmIntentService extends IntentService {
                 String matchType = extras.getString(EXTRA_GCMACTION_TYPE);
                 String gplusId = extras.getString(EXTRA_PLAYER_GPLUS_ID);
                 if (GCMACTION_SEARCH_FOR_PLAYERS.equalsIgnoreCase(matchType)) {
-                    //TODO checks if the request comes from the same device (check the player id)
-                    mLogFacility.v(LOG_TAG, gplusId + " launched a search for players");
-                    Intent intent2 = new Intent(getApplicationContext(), GPlusCommunicationService.class);
-                    intent2.setAction(GPlusCommunicationService.ACTION_SEARCH_FOR_PLAYERS);
-                    intent2.putExtra(GPlusCommunicationService.EXTRA_USER_ID, gplusId);
-                    startService(intent2);
+
+                    Player player = mAppPrefsManager.getCurrentPlayer();
+                    if (gplusId.equals(player.getSocialId())) {
+                        mLogFacility.v(LOG_TAG, "Request to start a new game from the same player, aborting");
+                    } else {
+                        mLogFacility.v(LOG_TAG, gplusId + " launched a search for players");
+                        Intent intent2 = new Intent(getApplicationContext(), GPlusCommunicationService.class);
+                        intent2.setAction(GPlusCommunicationService.ACTION_SEARCH_FOR_PLAYERS);
+                        intent2.putExtra(GPlusCommunicationService.EXTRA_USER_ID, gplusId);
+                        startService(intent2);
+                    }
 
                 } else if (GCMACTION_ACCEPTED.equalsIgnoreCase(matchType)) {
                     mLogFacility.v(LOG_TAG, "Current player has been accepted for a game se has asked to participate");

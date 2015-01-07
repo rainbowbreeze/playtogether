@@ -25,7 +25,9 @@ public class GPlusCommunicationService extends GoogleApiClientBaseService {
     public static final String ACTION_SEARCH_FOR_PLAYERS = "it.rainbowbreeze.playtog.Action.Plus.SearchForPlayers";
     public static final String ACTION_LOAD_CURRENT_USER = "it.rainbowbreeze.playtog.Action.Plus.LoadCurrentUser";
     public static final String ACTION_ADD_USER_TO_GAME = "it.rainbowbreeze.playtog.Action.Plus.AddUserToGame";
-    public static final String EXTRA_USER_ID = "Param.UserId";
+    public static final String EXTRA_USER_ID = "Extra.UserId";
+    public static final String EXTRA_ROOM_ID = "Extra.RoomId";
+    public static final String EXTRA_GAME_ID = "Extra.GameId";
 
     @Inject ILogFacility mLogFacility;
     @Inject PlayerDao mPlayerDao;
@@ -92,14 +94,17 @@ public class GPlusCommunicationService extends GoogleApiClientBaseService {
 
         } else if (ACTION_SEARCH_FOR_PLAYERS.equals(intent.getAction())) {
             // Retrieves asking user details
+            String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
+            String gameId = intent.getStringExtra(EXTRA_GAME_ID);
             Player askingPlayer = mGPlusHelper.get(mGoogleApiClient, userId);
             if (null != askingPlayer) {
-                mLogFacility.v(LOG_TAG, askingPlayer.getName() + " has asked to join a new game");
+                mLogFacility.v(LOG_TAG, askingPlayer.getName() + " has asked to join a new game for room " + roomId);
                 Intent startIntent = new Intent(getApplicationContext(), JoinGameActivity.class);
                 startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startIntent.putExtra(JoinGameActivity.EXTRA_PLAYER_NAME, askingPlayer.getName());
                 startIntent.putExtra(JoinGameActivity.EXTRA_PLAYER_PICTURE_URL, askingPlayer.getPictureUrl());
-                startIntent.putExtra(JoinGameActivity.EXTRA_GAME_ID, "null");
+                startIntent.putExtra(JoinGameActivity.EXTRA_ROOM_ID, roomId);
+                startIntent.putExtra(JoinGameActivity.EXTRA_GAME_ID, gameId);
                 startActivity(startIntent);
             } else {
                 mLogFacility.i(LOG_TAG, "A request for players has arrived, but is impossible to find the asking player");

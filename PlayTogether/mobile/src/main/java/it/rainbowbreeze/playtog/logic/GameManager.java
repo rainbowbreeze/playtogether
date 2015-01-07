@@ -128,7 +128,7 @@ public class GameManager {
                             add(new Player().setName("Valentina Frassi").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
                             break;
                         default:
-                            add(new Player().setName("Alessandro Antiga" + i).setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-txy6s8_3HSU/UjsrZJT6jkI/AAAAAAAAHuw/xdSVu4KCH8U/s512-no/IMG_20130919_130416.jpg"));
+                            add(new Player().setName("Alessandro Antiga").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-txy6s8_3HSU/UjsrZJT6jkI/AAAAAAAAHuw/xdSVu4KCH8U/s512-no/IMG_20130919_130416.jpg"));
                             break;
                     }
                     //mLogFacility.v(LOG_TAG, "Posting new player " + i);

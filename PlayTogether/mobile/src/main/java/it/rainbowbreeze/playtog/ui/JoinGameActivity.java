@@ -27,7 +27,8 @@ public class JoinGameActivity extends ActionBarActivity {
 
     public static final String EXTRA_PLAYER_NAME = "PlayerName";
     public static final String EXTRA_PLAYER_PICTURE_URL = "PlayerPictureUrl";
-    public static final String EXTRA_GAME_ID = "GameID";
+    public static final String EXTRA_GAME_ID = "Extra.GameID";
+    public static final String EXTRA_ROOM_ID = "Extra.RoomId";
 
     @Inject ILogFacility mLogFacility;
     private String mGameId;
@@ -45,7 +46,10 @@ public class JoinGameActivity extends ActionBarActivity {
         mGameId = getIntent().getStringExtra(EXTRA_GAME_ID);
 
         TextView lblMessage = (TextView) findViewById(R.id.joingame_lblMessage);
-        String message = String.format(getString(R.string.joingame_lblMessage), playerName, "Fosball 4th floor");
+        String message = String.format(
+                getString(R.string.joingame_lblMessage),
+                playerName,
+                getIntent().getStringExtra(EXTRA_ROOM_ID));
         mLogFacility.v(LOG_TAG, message);
         lblMessage.setText(message);
 

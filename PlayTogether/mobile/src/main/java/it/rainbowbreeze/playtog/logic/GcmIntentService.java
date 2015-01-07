@@ -24,9 +24,12 @@ public class GcmIntentService extends IntentService {
     private static final String LOG_TAG = GcmIntentService.class.getSimpleName();
 
     // Needs to match with the corresponding GCM sender class in the backend
-    private static final String EXTRA_MESSAGE = "message";
-    private static final String EXTRA_GCMACTION_TYPE = "gcmActionType";
-    private static final String EXTRA_PLAYER_GPLUS_ID = "playerId";
+    public static final String EXTRA_MESSAGE = "Message";
+    public static final String EXTRA_GCMACTION_TYPE = "GcmActionType";
+    public static final String EXTRA_PLAYER_ID = "PlayerId";
+    public static final String EXTRA_ROOM_ID = "RoomId";
+    public static final String EXTRA_GAME_ID = "GameId";
+
     // Needs to match with the corresponding class in the backend
     private static final String GCMACTION_SEARCH_FOR_PLAYERS = "SearchForPlayers";
     private static final String GCMACTION_ACCEPTED = "Accepted";
@@ -62,19 +65,10 @@ public class GcmIntentService extends IntentService {
                 showToast(extras.getString(EXTRA_MESSAGE));
 
                 String matchType = extras.getString(EXTRA_GCMACTION_TYPE);
-                String gplusId = extras.getString(EXTRA_PLAYER_GPLUS_ID);
-                if (GCMACTION_SEARCH_FOR_PLAYERS.equalsIgnoreCase(matchType)) {
+                String gplusId = extras.getString(EXTRA_PLAYER_ID);
 
-                    Player player = mAppPrefsManager.getCurrentPlayer();
-                    if (gplusId.equals(player.getSocialId())) {
-                        mLogFacility.v(LOG_TAG, "Request to start a new game from the same player, aborting");
-                    } else {
-                        mLogFacility.v(LOG_TAG, gplusId + " launched a search for players");
-                        Intent intent2 = new Intent(getApplicationContext(), GPlusCommunicationService.class);
-                        intent2.setAction(GPlusCommunicationService.ACTION_SEARCH_FOR_PLAYERS);
-                        intent2.putExtra(GPlusCommunicationService.EXTRA_USER_ID, gplusId);
-                        startService(intent2);
-                    }
+                if (GCMACTION_SEARCH_FOR_PLAYERS.equalsIgnoreCase(matchType)) {
+                    searchForPlayers(extras, gplusId);
 
                 } else if (GCMACTION_ACCEPTED.equalsIgnoreCase(matchType)) {
                     mLogFacility.v(LOG_TAG, "Current player has been accepted for a game se has asked to participate");
@@ -97,6 +91,28 @@ public class GcmIntentService extends IntentService {
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
+    }
+
+    private void searchForPlayers(Bundle extras, String gplusId) {
+        String roomId = extras.getString(EXTRA_ROOM_ID);
+        String gameId = extras.getString(EXTRA_GAME_ID);
+
+        if (TextUtils.isEmpty(gplusId) || TextUtils.isEmpty(roomId)) {
+            mLogFacility.i(LOG_TAG, "Request to start a new game, but params are invalid. Room id: " + roomId + " - user id: " + gplusId);
+        } else {
+            Player player = mAppPrefsManager.getCurrentPlayer();
+            if (gplusId.equals(player.getSocialId())) {
+                mLogFacility.v(LOG_TAG, "Request to start a new game from the same player, aborting");
+            } else {
+                mLogFacility.v(LOG_TAG, gplusId + " launched a search for players");
+                Intent intent2 = new Intent(getApplicationContext(), GPlusCommunicationService.class);
+                intent2.setAction(GPlusCommunicationService.ACTION_SEARCH_FOR_PLAYERS);
+                intent2.putExtra(GPlusCommunicationService.EXTRA_USER_ID, gplusId);
+                intent2.putExtra(GPlusCommunicationService.EXTRA_ROOM_ID, roomId);
+                intent2.putExtra(GPlusCommunicationService.EXTRA_GAME_ID, gameId);
+                startService(intent2);
+            }
+        }
     }
 
     protected void showToast(final String message) {

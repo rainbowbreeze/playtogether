@@ -6,9 +6,11 @@ package it.rainbowbreeze.playtog.common;
 public class Bag {
 
     // Need to match with the corresponding class in the mobile module
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String EXTRA_GCMACTION_TYPE = "gcmActionType";
-    public static final String EXTRA_PLAYER_ID = "playerId";
+    public static final String EXTRA_MESSAGE = "Message";
+    public static final String EXTRA_GCMACTION_TYPE = "GcmActionType";
+    public static final String EXTRA_PLAYER_ID = "PlayerId";
+    public static final String EXTRA_ROOM_ID = "RoomId";
+    public static final String EXTRA_GAME_ID = "GameId";
 
     // Needs to match with the corresponding class in the mobile module
     public static final String GCMACTION_SEARCH_FOR_PLAYERS = "SearchForPlayers";

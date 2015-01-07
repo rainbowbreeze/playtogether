@@ -63,6 +63,8 @@ public class GameEndpoint {
         Message message = new Message.Builder()
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_SEARCH_FOR_PLAYERS)
                 .addData(Bag.EXTRA_PLAYER_ID, game.getCallPlayerId())
+                .addData(Bag.EXTRA_ROOM_ID, game.getRoomId())
+                .addData(Bag.EXTRA_GAME_ID, String.valueOf(game.getId()))
                 .build();
         GcmMessageHelper messageHelper = new GcmMessageHelper();
         messageHelper.sendMessage(message);

@@ -18,8 +18,8 @@ import it.rainbowbreeze.playtog.registration.Registration;
 /**
  * Created by alfredomorresi on 06/01/15.
  */
-public class BackendManager {
-    private static final String LOG_TAG = BackendManager.class.getSimpleName();
+public class BackendHelper {
+    private static final String LOG_TAG = BackendHelper.class.getSimpleName();
 
     private final ILogFacility mLogFacility;
     private final AppPrefsManager mAppPrefsManager;
@@ -27,7 +27,7 @@ public class BackendManager {
     protected final Context mAppContext;
     private static final String SENDER_ID = "681581883585";  // Project ID of the backend app
 
-    public BackendManager(Context appContext, ILogFacility logFacility, AppPrefsManager appPrefsManager) {
+    public BackendHelper(Context appContext, ILogFacility logFacility, AppPrefsManager appPrefsManager) {
         mAppContext = appContext;
         mLogFacility = logFacility;
         mAppPrefsManager = appPrefsManager;

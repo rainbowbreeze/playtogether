@@ -2,7 +2,7 @@ package it.rainbowbreeze.playtog.logic.actions;
 
 import it.rainbowbreeze.libs.common.IRainbowLogFacility;
 import it.rainbowbreeze.libs.logic.RainbowActionsManager;
-import it.rainbowbreeze.playtog.logic.BackendManager;
+import it.rainbowbreeze.playtog.logic.BackendHelper;
 
 /**
  * Created by alfredomorresi on 06/01/15.
@@ -10,11 +10,11 @@ import it.rainbowbreeze.playtog.logic.BackendManager;
 public class SubscribeClientToGcmAction extends RainbowActionsManager.BaseAction {
     private static final String LOG_TAG = SubscribeClientToGcmAction.class.getSimpleName();
 
-    private final BackendManager mBackendManager;
+    private final BackendHelper mBackendHelper;
 
-    protected SubscribeClientToGcmAction(IRainbowLogFacility logFacility, BackendManager backendManager, ActionsManager actionManager) {
+    protected SubscribeClientToGcmAction(IRainbowLogFacility logFacility, BackendHelper backendHelper, ActionsManager actionManager) {
         super(logFacility, actionManager);
-        mBackendManager = backendManager;
+        mBackendHelper = backendHelper;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SubscribeClientToGcmAction extends RainbowActionsManager.BaseAction
 
     @Override
     protected void doYourStuff() {
-        mBackendManager.registerClient();
+        mBackendHelper.registerClient();
     }
 
     @Override

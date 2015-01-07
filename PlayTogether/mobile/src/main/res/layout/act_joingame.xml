@@ -46,7 +46,6 @@
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="@dimen/navigation_drawer_width"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
             app:border_width="2dp"
             app:border_color="#FF000000"
             android:src="@drawable/ic_launcher"
@@ -54,11 +53,8 @@
 
         <TextView
             android:id="@+id/joingame_lblMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/commom_lblMessage"
             android:layout_below="@id/joingame_imgProfile"
-            android:textSize="20dp"
-            android:gravity="center"
         />
     </RelativeLayout>
 

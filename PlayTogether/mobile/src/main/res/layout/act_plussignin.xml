@@ -29,6 +29,7 @@
         android:id="@+id/plussignin_layProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
     >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -37,10 +38,10 @@
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="@dimen/navigation_drawer_width"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
             app:border_width="2dp"
             app:border_color="#FF000000"
             android:src="@drawable/ic_launcher"
+            android:visibility="gone"
             />
 
         <com.google.android.gms.common.SignInButton
@@ -49,8 +50,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dip"
             android:enabled="false"
+            android:visibility="gone"
         />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/plussignin_lblStatus"
+        style="@style/commom_lblMessage"
+        android:layout_marginBottom="20dp"
+        android:text="@string/plussignin_statusSignedOut"
+    />
 
     <Button
         android:id="@+id/plussignin_btnSignOut"
@@ -68,12 +77,5 @@
         android:enabled="false"
     />
 
-    <TextView
-        android:id="@+id/plussignin_lblStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dip"
-        android:text="@string/plussignin_statusSignedOut"
-    />
 
 </LinearLayout>

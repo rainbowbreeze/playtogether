@@ -42,8 +42,8 @@ public class MyApp extends Application {
         super.onCreate();
 
         mObjectGraph = ObjectGraph.create(getModules().toArray());
-        Picasso.with(getApplicationContext()).setIndicatorsEnabled(BuildConfig.DEBUG);
-        Picasso.with(getApplicationContext()).setLoggingEnabled(BuildConfig.DEBUG);
+        //Picasso.with(getApplicationContext()).setIndicatorsEnabled(BuildConfig.DEBUG);
+        //Picasso.with(getApplicationContext()).setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     /**

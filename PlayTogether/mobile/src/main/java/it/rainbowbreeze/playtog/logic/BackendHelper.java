@@ -1,6 +1,7 @@
 package it.rainbowbreeze.playtog.logic;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -86,17 +87,25 @@ public class BackendHelper {
     private void setupRegistration() {
         if (mRegService == null) {
             Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
-                    // otherwise they can be skipped
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-                                throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
+                    new AndroidJsonFactory(), null);
+
+            //Run in the emulator, connect to local server
+            if (Build.FINGERPRINT.startsWith("generic")) {
+                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
+                // otherwise they can be skipped
+                builder
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+                                    throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+            // Run on device, connect on real server
+            } else {
+                builder.setRootUrl("https://play-together-2015.appspot.com/_ah/api/");
+            }
             mRegService = builder.build();
         }
     }

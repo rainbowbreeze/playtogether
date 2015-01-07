@@ -36,11 +36,9 @@ public class JoinGameActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((MyApp) getApplicationContext()).inject(this);
-
         mLogFacility.logStartOfActivity(LOG_TAG, JoinGameActivity.class, savedInstanceState);
 
         setContentView(R.layout.act_joingame);
-        setTitle(getString(R.string.joingame_title));
 
         String playerName = getIntent().getStringExtra(EXTRA_PLAYER_NAME);
         String playerProfileUrl = getIntent().getStringExtra(EXTRA_PLAYER_PICTURE_URL);

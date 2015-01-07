@@ -101,7 +101,7 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
      */
     private static final String PREF_GCM_REGID = "pref_gcmRegId";
     public String getGCMRegId() {
-        return mAppPreferences.getString(PREF_GCM_REGID, "");
+        return mAppPreferences.getString(PREF_GCM_REGID, null);
     }
     public AppPrefsManager setGCMRegId(String newValue) {
         openSharedEditor();

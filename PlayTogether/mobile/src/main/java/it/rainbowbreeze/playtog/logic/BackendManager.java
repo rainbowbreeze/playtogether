@@ -67,6 +67,7 @@ public class BackendManager {
         String regId = mAppPrefsManager.getGCMRegId();
         if (TextUtils.isEmpty(regId)) {
             mLogFacility.e(LOG_TAG, "Cannot unregister a client that doesn't have a registered ID");
+            return;
         }
         try {
             // Don't need to unregister from GCM server, only from the backend.

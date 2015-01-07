@@ -247,7 +247,7 @@ public class PlusSignInActivity
         mSignInProgress = STATE_DEFAULT;
 
         // Saves new user information
-        // TODO maybe a service is more appropriate for async operation
+        // TODO move from here
         mLogFacility.v(LOG_TAG, "Creating a player from current user " + currentUser.toString());
         mAppPrefsManager.setCurrentPlayer(Player.createFrom(currentUser));
         mActionsManager.SubscribeClientToGcm().executeAsync();

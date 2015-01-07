@@ -11,6 +11,7 @@ import dagger.Provides;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.data.PlayerDao;
 import it.rainbowbreeze.playtog.logic.BackendHelper;
+import it.rainbowbreeze.playtog.logic.GPlusHelper;
 import it.rainbowbreeze.playtog.logic.MainThreadBus;
 import it.rainbowbreeze.playtog.logic.MatchManager;
 import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
@@ -91,6 +92,11 @@ public class MobileModule {
             ILogFacility logFacility,
             BackendHelper backendHelper) {
         return new ActionsManager(appContext, logFacility, backendHelper);
+    }
+
+    @Provides @Singleton
+    public GPlusHelper provideGPlusHelper(ILogFacility logFacility) {
+        return new GPlusHelper(logFacility);
     }
 
     @Provides @Singleton

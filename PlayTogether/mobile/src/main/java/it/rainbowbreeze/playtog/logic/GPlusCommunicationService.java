@@ -5,10 +5,7 @@ import android.text.TextUtils;
 
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import javax.inject.Inject;
 
@@ -31,6 +28,7 @@ public class GPlusCommunicationService extends GoogleApiClientBaseService {
     @Inject ILogFacility mLogFacility;
     @Inject PlayerDao mPlayerDao;
     @Inject AppPrefsManager mAppPrefsManager;
+    @Inject GPlusHelper mGPlusHelper;
 
     public GPlusCommunicationService() {
         super(LOG_TAG, LOG_TAG);
@@ -73,32 +71,22 @@ public class GPlusCommunicationService extends GoogleApiClientBaseService {
         if (ACTION_LOADCURRENTUSER.equals(intent.getAction())) {
             mLogFacility.v(LOG_TAG, "Loading current user info");
             // Retrieve some profile information to personalize our app for the user.
-            Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-            mAppPrefsManager.setCurrentPlayer(Player.createFrom(currentUser));
-            mLogFacility.v(LOG_TAG, "Logged user stored as a player");
+            Player player = mGPlusHelper.getLogged(mGoogleApiClient);
+            if (null != player) {
+                mAppPrefsManager.setCurrentPlayer(player);
+                mLogFacility.v(LOG_TAG, "Logged user stored as a player");
+            } else {
+                mLogFacility.v(LOG_TAG, "Cannot store logged G+ user as a player");
+            }
 
         } else if (ACTION_LOADUSER.equals(intent.getAction())) {
-            mLogFacility.v(LOG_TAG, "Adding to database person id " + userId);
-            // Retrieve some profile information to personalize our app for the user.
-            People.LoadPeopleResult peopleResult = Plus.PeopleApi.load(mGoogleApiClient, userId).await();
-            PersonBuffer personBuffer = peopleResult.getPersonBuffer();
-            Person person = null;
-            if (personBuffer.getCount() > 0) {
-                person = personBuffer.get(0);
-                if (null != person) {
-                    // Adds the person to the provider
-                    Player player = Player.createFrom(person);
-                    mPlayerDao.insert(player);
-                    mLogFacility.v(LOG_TAG, "Added to database G+ person " + player.getName());
-                }
+            Player player = mGPlusHelper.get(mGoogleApiClient, userId);
+            if (null != player) {
+                mPlayerDao.insert(player);
+                mLogFacility.v(LOG_TAG, "Added to database G+ person " + player.getName());
+            } else {
+                mLogFacility.v(LOG_TAG, "Cannot add any G+ person to db because she wasn't found");
             }
-            if (null == person) {
-                mLogFacility.v(LOG_TAG, "Cannot find any public G+ person for id " + userId);
-            }
-            personBuffer.close();
-
         }
-
-
     }
 }

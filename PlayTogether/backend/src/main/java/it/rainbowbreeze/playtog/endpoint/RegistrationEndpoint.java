@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
+import it.rainbowbreeze.playtog.common.Bag;
+import it.rainbowbreeze.playtog.data.RegistrationDao;
 import it.rainbowbreeze.playtog.domain.RegistrationRecord;
-
-import static it.rainbowbreeze.playtog.OfyService.ofy;
 
 /**
  * A registration endpoint class we are exposing for a device's GCM registration id on the backend
@@ -34,44 +34,62 @@ import static it.rainbowbreeze.playtog.OfyService.ofy;
         name = "registration",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "playtog.rainbowbreeze.it",
-                ownerName = "playtog.rainbowbreeze.it",
-                packagePath = "")
+                ownerDomain = Bag.API_OWNER_DOMAIN,
+                ownerName = Bag.API_OWNER_NAME,
+                packagePath = Bag.API_PACKAGE_PATH)
 )
 public class RegistrationEndpoint {
-    private static final Logger log = Logger.getLogger(RegistrationEndpoint.class.getName());
+    private static final Logger mLog = Logger.getLogger(RegistrationEndpoint.class.getName());
+
+    private final RegistrationDao mRegistrationDao;
+
+    public RegistrationEndpoint() {
+        mRegistrationDao = new RegistrationDao();
+    }
 
     /**
      * Register a device to the backend
      *
-     * @param regId The Google Cloud Messaging registration Id to add
+     * @param registrationId The Google Cloud Messaging registration Id to add
+     * @param userId The userId that is using the device
      */
     @ApiMethod(name = "register")
-    public void registerDevice(@Named("regId") String regId) {
-        if (findRecord(regId) != null) {
-            log.info("Device " + regId + " already registered, skipping register");
+    public void registerDevice(
+            @Named("registrationId") String registrationId,
+            @Named("userId") String userId
+    ) {
+        RegistrationRecord registration = mRegistrationDao.get(registrationId);
+        if (registration != null && registration.getUserId().equals(userId)) {
+            mLog.info("Device " + registrationId + " already registered with the same user, skipping register");
             return;
         }
-        RegistrationRecord record = new RegistrationRecord();
-        record.setRegId(regId);
-        ofy().save().entity(record).now();
-        log.info("Registered new device: " + regId);
+        // Deletes old record, probably another user logged to the same device
+        mRegistrationDao.delete(registration);
+
+        // Adds the new record
+        RegistrationRecord record = new RegistrationRecord()
+                .setRegistrationId(registrationId)
+                .setUserId(userId);
+        mRegistrationDao.save(record);
+        mLog.info("Registered new device: " + registrationId);
     }
 
     /**
      * Unregister a device from the backend
      *
-     * @param regId The Google Cloud Messaging registration Id to remove
+     * @param registrationId The Google Cloud Messaging registration Id to remove
      */
     @ApiMethod(name = "unregister")
-    public void unregisterDevice(@Named("regId") String regId) {
-        RegistrationRecord record = findRecord(regId);
+    public void unregisterDevice(
+            @Named("registrationId") String registrationId
+    ) {
+        RegistrationRecord record = mRegistrationDao.get(registrationId);
         if (record == null) {
-            log.info("Device " + regId + " not registered, skipping unregister");
+            mLog.info("Device " + registrationId + " not registered, skipping unregister");
             return;
         }
-        ofy().delete().entity(record).now();
-        log.info("Unregistered device: " + regId);
+        mRegistrationDao.delete(record);
+        mLog.info("Unregistered device: " + registrationId);
     }
 
     /**
@@ -81,13 +99,11 @@ public class RegistrationEndpoint {
      * @return a list of Google Cloud Messaging registration Ids
      */
     @ApiMethod(name = "listDevices")
-    public CollectionResponse<RegistrationRecord> listDevices(@Named("count") int count) {
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(count).list();
+    public CollectionResponse<RegistrationRecord> listDevices(
+            @Named("count") int count
+    ) {
+        List<RegistrationRecord> records = mRegistrationDao.listAll();
         return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
-    }
-
-    private RegistrationRecord findRecord(String regId) {
-        return ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
     }
 
 }

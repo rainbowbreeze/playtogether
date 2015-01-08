@@ -108,4 +108,26 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
         saveIfNeeded();
         return this;
     }
+
+    /**
+     * Google Cloud Message registration id. It should be generated once for each installed app,
+     * so even if the user unregisters from the backend, the next time she registers the previous
+     * registration id should be user.
+     *
+     * Look at GoogleCloudMessaging.html#unregister() reference for detailed instructions
+     */
+    private static final String PREF_CURRENT_GAME_ID = "pref_currentGameId";
+    public String getCurrentGameId() {
+        return mAppPreferences.getString(PREF_CURRENT_GAME_ID, null);
+    }
+    public AppPrefsManager setCurrentGameId(String newValue) {
+        openSharedEditor();
+        mSharedEditor.putString(PREF_CURRENT_GAME_ID, newValue);
+        saveIfNeeded();
+        return this;
+    }
+    public AppPrefsManager resetCurrentGameId() {
+        return setCurrentGameId(null);
+    }
+
 }

@@ -6,49 +6,67 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import it.rainbowbreeze.playtog.data.RegistrationDao;
 import it.rainbowbreeze.playtog.domain.RegistrationRecord;
-
-import static it.rainbowbreeze.playtog.OfyService.ofy;
 
 /**
  * Created by alfredomorresi on 07/01/15.
  */
 public class GcmMessageHelper {
-    private static final Logger log = Logger.getLogger(GcmMessageHelper.class.getName());
+    private static final Logger mLog = Logger.getLogger(GcmMessageHelper.class.getName());
 
     /**
      * Api Keys can be obtained from the google cloud console
      */
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
+    private final RegistrationDao mRegistrationDao;
+    private final Sender mSender;
 
+    public GcmMessageHelper() {
+        mRegistrationDao = new RegistrationDao();
+        mSender = new Sender(API_KEY);
+    }
+
+    /**
+     * Send messages to all the registered devices (within the max limit)
+     * @param message
+     * @throws IOException
+     */
     public void sendMessage(Message message) throws IOException {
-        Sender sender = new Sender(API_KEY);
+        // Ok, I now, it isn't the most optimized way of doing
+        List<RegistrationRecord> registrations = mRegistrationDao.listAll();
+        List<String> registrationIds = new ArrayList<>();
+        for (RegistrationRecord registration : registrations) {
+            registrationIds.add(registration.getRegistrationId());
+        }
+        sendMessage(registrationIds, message);
+    }
 
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(30).list();
-        log.info("Sending to " + records.size() + " clients message " + message);
-        for (RegistrationRecord record : records) {
-            Result result = sender.send(message, record.getRegId(), 5);
+    public void sendMessage(List<String> registrationIds, Message message) throws IOException  {
+        mLog.info("Sending to " + registrationIds.size() + " clients message " + message);
+        for (String registrationId : registrationIds) {
+            Result result = mSender.send(message, registrationId, 5);
             if (result.getMessageId() != null) {
-                log.info("Message sent to " + record.getRegId());
+                mLog.info("Message sent to " + registrationId);
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore
-                    log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
-                    record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
+                    mLog.info("Registration Id changed for " + registrationId + " updating to " + canonicalRegId);
+                    mRegistrationDao.updateRegistrationId(registrationId, canonicalRegId);
                 }
             } else {
                 String error = result.getErrorCodeName();
                 if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-                    log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
+                    mLog.warning("Registration Id " + registrationId + " no longer registered with GCM, removing from datastore");
                     // if the device is no longer registered with Gcm, remove it from the datastore
-                    ofy().delete().entity(record).now();
+                    mRegistrationDao.removeByRegistrationId(registrationId);
                 } else {
-                    log.warning("Error when sending message : " + error);
+                    mLog.warning("Error when sending message : " + error);
                 }
             }
         }

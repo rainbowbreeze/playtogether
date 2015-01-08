@@ -12,16 +12,18 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
 
 import it.rainbowbreeze.playtog.common.Bag;
+import it.rainbowbreeze.playtog.data.GameDao;
+import it.rainbowbreeze.playtog.data.RegistrationDao;
+import it.rainbowbreeze.playtog.domain.BaseResult;
 import it.rainbowbreeze.playtog.domain.GameRecord;
 import it.rainbowbreeze.playtog.logic.GcmMessageHelper;
-
-import static it.rainbowbreeze.playtog.OfyService.ofy;
 
 /**
  * A registration endpoint class we are exposing for a device's GCM registration id on the backend
@@ -37,37 +39,74 @@ import static it.rainbowbreeze.playtog.OfyService.ofy;
         name = "game",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "playtog.rainbowbreeze.it",
-                ownerName = "playtog.rainbowbreeze.it",
-                packagePath = "")
+                ownerDomain = Bag.API_OWNER_DOMAIN,
+                ownerName = Bag.API_OWNER_NAME,
+                packagePath = Bag.API_PACKAGE_PATH)
 )
 public class GameEndpoint {
     private static final Logger mLog = Logger.getLogger(GameEndpoint.class.getName());
 
+    private final GameDao mGameDao;
+    private final RegistrationDao mRegistrationDao;
+    private final GcmMessageHelper mGcmMessageHelper;
+
+    public GameEndpoint() {
+        mGameDao = new GameDao();
+        mRegistrationDao = new RegistrationDao();
+        mGcmMessageHelper = new GcmMessageHelper();
+    }
+
+    public static class GameResult extends BaseResult {
+        private final String mGameId;
+
+        public static GameResult WRONG_RESULT = new GameResult(false);
+
+        public GameResult(String gameId) {
+            super(true);
+            mGameId = gameId;
+        }
+
+        private GameResult(boolean wentWell) {
+            super(wentWell);
+            mGameId = null;
+        }
+
+        public String getGameId() {
+            return mGameId;
+        }
+    }
+
     /**
      * Starts to ask for players for a new game
      *
-     * @param userId
-     * @param roomId
+     * @param ownerId the user id that asked for the new game
+     * @param roomId the room id of the new game
+     *
+     * @return
      */
     @ApiMethod(name = "searchForPlayers")
-    public void searchForPlayers(@Named("userId") String userId, @Named("roomId") String roomId) throws IOException {
+    public GameResult searchForPlayers(
+            @Named("ownerId") String ownerId,
+            @Named("roomId") String roomId
+    ) throws IOException {
         // Stores the new game request
         GameRecord game = new GameRecord()
-                .setCallPlayerId(userId)
+                .setOwnerId(ownerId)
                 .setRoomId(roomId);
-        //ofy().save().entity(game).now();
+        mGameDao.save(game);
         mLog.info("Saved new game request");
 
         // Alerts other players for then new game request
         Message message = new Message.Builder()
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_SEARCH_FOR_PLAYERS)
-                .addData(Bag.EXTRA_PLAYER_ID, game.getCallPlayerId())
+                .addData(Bag.EXTRA_PLAYER_ID, game.getOwnerId())
                 .addData(Bag.EXTRA_ROOM_ID, game.getRoomId())
                 .addData(Bag.EXTRA_GAME_ID, String.valueOf(game.getId()))
                 .build();
-        GcmMessageHelper messageHelper = new GcmMessageHelper();
-        messageHelper.sendMessage(message);
+        //TODO filters by room
+        mGcmMessageHelper.sendMessage(message);
+
+        return new GameResult(game.getId());
     }
 
     /**
@@ -77,19 +116,34 @@ public class GameEndpoint {
      * @param newUserId
      */
     @ApiMethod(name = "participate")
-    public void participate(@Named("gameId") String gameId, @Named("userId") String newUserId) throws IOException {
-        GameRecord game = getGameRecord(gameId);
+    public GameResult participate(
+            @Named("gameId") String gameId,
+            @Named("userId") String newUserId
+    ) throws IOException {
+        GameRecord game = mGameDao.get(gameId);
 
         if (null == game) {
             mLog.info("Cannot load the game to participate, aborting");
+            return GameResult.WRONG_RESULT;
         }
 
+        // Adds the new player to the collection of players for a given game request
+        game.addPlayer(newUserId);
+        mGameDao.save(game);
+
+        // Retrieves the game owner, so she can be used alerted of the new player
+        String ownerId = game.getOwnerId();
+        // Retrieves list of devices to send the notification
+        List<String> devices = mRegistrationDao.getRegistrationIdsForUser(ownerId);
+        // Sends a notification to game owner about the new player
         Message message = new Message.Builder()
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_NEW_USER_FOR_GAME)
                 .addData(Bag.EXTRA_PLAYER_ID, newUserId)
                 .build();
         GcmMessageHelper messageHelper = new GcmMessageHelper();
-        messageHelper.sendMessage(message);
+        messageHelper.sendMessage(devices, message);
+
+        return new GameResult(gameId);
     }
 
 
@@ -97,32 +151,61 @@ public class GameEndpoint {
      * Starts a new game with the given players
      *
      * @param gameId
-     * @param players
+     * @param playerIds
      */
     @ApiMethod(name = "start")
-    public void start(@Named("gameId") String gameId, @Named("players") List<String> players) throws IOException {
-        GameRecord game = getGameRecord(gameId);
+    public GameResult start(
+            @Named("gameId") String gameId,
+            @Named("playerIds") List<String> playerIds
+    ) throws IOException {
+        GameRecord game = mGameDao.get(gameId);
         if (null == game) {
             mLog.info("Cannot load the game to start, aborting");
         }
-        // Reads all the players that asked to participate to a given match
+
+        // First of all, checks if accepted players really accepted the match
+        List<String> missingPlayerIds = new ArrayList<>();
+        for (String playerId : playerIds) {
+            if (game.getPlayerIds().contains(playerId)) {
+                missingPlayerIds.add(playerId);
+            }
+        }
+        if (missingPlayerIds.size() > 0) {
+            mLog.info("Strange, there are " + missingPlayerIds.size() + " player(s) accepted that haven't registered for the game: " + missingPlayerIds.toString());
+        }
 
         Message message;
         // Alerts all players that they've been accepted to a given game
         message = new Message.Builder()
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_ACCEPTED)
+                .addData(Bag.EXTRA_ROOM_ID, game.getRoomId())
                 .build();
+        for (String playerId : playerIds) {
+            // Send a message for every device registered for a given player
+            List<String> registrationIds = mRegistrationDao.getRegistrationIdsForUser(playerId);
+            mGcmMessageHelper.sendMessage(registrationIds, message);
+        }
 
         // Alerts all players that they've been refused for a given game
         message = new Message.Builder()
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_DENIED)
+                .addData(Bag.EXTRA_ROOM_ID, game.getRoomId())
                 .build();
+        // Removes all accepted players from the list of players for a given game
+        List<String> excludedPlayerIds = game.getPlayerIds();  // Copy, not in that way :(
+        for (String playerId : playerIds) {
+            excludedPlayerIds.remove(playerId);
+        }
+        // Communicated to the excluded players the bad news
+        for (String excludedPlayerId : excludedPlayerIds) {
+            // Send a message for every device registered for a given player
+            List<String> registrationIds = mRegistrationDao.getRegistrationIdsForUser(excludedPlayerId);
+            mGcmMessageHelper.sendMessage(registrationIds, message);
+        }
 
-        // Remove game data
-    }
-
-    private GameRecord getGameRecord(String id) {
-        return ofy().load().type(GameRecord.class).id(id).now();
+        // Deletes the game record
+        mGameDao.delete(game);
+        return new GameResult(null);
     }
 
 }

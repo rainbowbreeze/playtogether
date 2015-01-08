@@ -32,9 +32,9 @@ import it.rainbowbreeze.playtog.logic.GcmMessageHelper;
         name = "messaging",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "playtog.rainbowbreeze.it",
-                ownerName = "playtog.rainbowbreeze.it",
-                packagePath = "")
+                ownerDomain = Bag.API_OWNER_DOMAIN,
+                ownerName = Bag.API_OWNER_NAME,
+                packagePath = Bag.API_PACKAGE_PATH)
 )
 public class MessagingEndpoint {
     private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());

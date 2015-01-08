@@ -11,11 +11,13 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
+import java.util.List;
 
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.domain.Player;
 import it.rainbowbreeze.playtog.game.Game;
+import it.rainbowbreeze.playtog.game.model.GameResult;
 import it.rainbowbreeze.playtog.registration.Registration;
 
 /**
@@ -57,7 +59,8 @@ public class BackendHelper {
             // so it can use GCM/HTTP or CCS to send messages to your app.
             // The request to your server should be authenticated if your app
             // is using accounts.
-            mRegService.register(regId).execute();
+            Player currentPlayer = mAppPrefsManager.getCurrentPlayer();
+            mRegService.register(regId, currentPlayer.getSocialId()).execute();
             mLogFacility.v(LOG_TAG, "Registered the client to GCM backend");
 
         } catch (IOException ex) {
@@ -84,19 +87,62 @@ public class BackendHelper {
         }
     }
 
-    public void searchForPlayers() {
+    public boolean searchForPlayers() {
         mLogFacility.v(LOG_TAG, "Searching for new players");
         setupGame();
 
         Player player = mAppPrefsManager.getCurrentPlayer();
         try {
-            mGameService.searchForPlayers(player.getSocialId(), "IT-MIL-CON-4-FOSBALL").execute();
-            mLogFacility.v(LOG_TAG, "Asked players for a new game");
+            GameResult result = mGameService.searchForPlayers(player.getSocialId(), "IT-MIL-CON-4-FOOSBALL").execute();
+            if (result.getSuccess()) {
+                mLogFacility.v(LOG_TAG, "Asked players for a new game");
+                mAppPrefsManager.setCurrentGameId(result.getGameId());
+                return true;
+            } else {
+                mLogFacility.v(LOG_TAG, "An error happened while asking players to join a new game");
+            }
         } catch (IOException ex) {
             mLogFacility.e(LOG_TAG, "Error searching for new players", ex);
         }
+        return false;
     }
 
+    public boolean startGame(String gameId, List<String> playerIds) {
+        mLogFacility.v(LOG_TAG, "Starting a game with selected players " + gameId);
+        setupGame();
+
+        try {
+            GameResult result = mGameService.start(gameId, playerIds).execute();
+            if (result.getSuccess()) {
+                mLogFacility.v(LOG_TAG, "Started a new game, good luck!");
+                return true;
+            } else {
+                mLogFacility.v(LOG_TAG, "An error happened starting a new game");
+            }
+        } catch (IOException ex) {
+            mLogFacility.e(LOG_TAG, "Error starting a new game", ex);
+        }
+        return false;
+    }
+
+    public boolean participateToAGame(String gameId) {
+        mLogFacility.v(LOG_TAG, "Participating to a game " + gameId);
+        setupGame();
+
+        Player player = mAppPrefsManager.getCurrentPlayer();
+        try {
+            GameResult result = mGameService.participate(gameId, player.getSocialId()).execute();
+            if (result.getSuccess()) {
+                mLogFacility.v(LOG_TAG, "Asked to participate to a game, now waiting for the approval");
+                return true;
+            } else {
+                mLogFacility.v(LOG_TAG, "An error happened participating to a game");
+            }
+        } catch (IOException ex) {
+            mLogFacility.e(LOG_TAG, "Error participating to a game", ex);
+        }
+        return false;
+    }
 
     /**
      * Setting up the registration object for communicating with the backend server

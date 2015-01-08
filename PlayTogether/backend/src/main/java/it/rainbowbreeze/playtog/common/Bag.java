@@ -18,4 +18,7 @@ public class Bag {
     public static final String GCMACTION_DENIED = "Denied";
     public static final String GCMACTION_NEW_USER_FOR_GAME = "NewUserForGame";
 
+    public static final String API_OWNER_DOMAIN = "playtog.rainbowbreeze.it";
+    public static final String API_OWNER_NAME = "playtog.rainbowbreeze.it";
+    public static final String API_PACKAGE_PATH = "";
 }

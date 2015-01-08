@@ -58,6 +58,7 @@ public class GameManager {
     public void cleanGameStateAndData() {
         mStartedSearchForPlayers = false;
         mPlayerDao.deleteAll();
+        mAppPrefsManager.resetCurrentGameId();
     }
 
     /**

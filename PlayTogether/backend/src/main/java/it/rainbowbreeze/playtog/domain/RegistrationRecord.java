@@ -10,21 +10,30 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 public class RegistrationRecord {
 
+    public RegistrationRecord() {
+    }
+
     @Id
     Long id;
 
     @Index
-    private String regId;
-    // you can add more fields...
-
-    public RegistrationRecord() {
+    private String registrationId;
+    public String getRegistrationId() {
+        return registrationId;
+    }
+    public RegistrationRecord setRegistrationId(String newValue) {
+        registrationId = newValue;
+        return this;
     }
 
-    public String getRegId() {
-        return regId;
+    @Index
+    private String userId;
+    public String getUserId() {
+        return userId;
+    }
+    public RegistrationRecord setUserId(String newValue) {
+        userId = newValue;
+        return this;
     }
 
-    public void setRegId(String regId) {
-        this.regId = regId;
-    }
 }

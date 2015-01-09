@@ -33,4 +33,7 @@ public class RegistrationRecord {
         return this;
     }
 
+    //TODO: add a when field, so cleanup of old ids could be performed
+    // in a background task once in a while
+
 }

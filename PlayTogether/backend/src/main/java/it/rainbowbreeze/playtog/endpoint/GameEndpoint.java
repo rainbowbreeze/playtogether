@@ -132,15 +132,15 @@ public class GameEndpoint {
         GameRecord game = mGameDao.get(gameId);
 
         if (null == game) {
-            mLog.info("Cannot load the game to participate, aborting");
-            return GameResult.buildWithError("Cannot load the game to participate, aborting");
+            mLog.info("Cannot load the game to participate for the id " + gameId);
+            return GameResult.buildWithError("Cannot load the game to participate for the id " + gameId);
         }
 
         // Adds the new player to the collection of players for a given game request
         game.addPlayer(newUserId);
         mGameDao.save(game);
 
-        // Retrieves the game owner, so she can be used alerted of the new player
+        // Retrieves the game owner, so she can be alerted of the new player
         String ownerId = game.getOwnerId();
         // Retrieves list of devices to send the notification
         List<String> devices = mRegistrationDao.getRegistrationIdsForUser(ownerId);

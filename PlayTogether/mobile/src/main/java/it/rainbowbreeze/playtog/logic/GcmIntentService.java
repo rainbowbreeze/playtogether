@@ -72,10 +72,10 @@ public class GcmIntentService extends IntentService {
                     searchForPlayers(extras, gplusId);
 
                 } else if (GCMACTION_ACCEPTED.equalsIgnoreCase(matchType)) {
-                    mLogFacility.v(LOG_TAG, "Current player has been accepted for a game se has asked to participate");
+                    mLogFacility.v(LOG_TAG, "Current player has been accepted for a game she has asked to participate");
 
                 } else if (GCMACTION_DENIED.equalsIgnoreCase(matchType)) {
-                    mLogFacility.v(LOG_TAG, "Current player has been rejected for a game se has asked to participate");
+                    mLogFacility.v(LOG_TAG, "Current player has been rejected for a game she has asked to participate");
 
                 } else if (GCMACTION_NEW_USER_FOR_GAME.equalsIgnoreCase(matchType)) {
                     mLogFacility.v(LOG_TAG, "A new player want to participate to a game opened by the current user");

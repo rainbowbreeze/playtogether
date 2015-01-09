@@ -108,4 +108,12 @@ public class RegistrationEndpoint {
         return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
     }
 
+    /**
+     * Deletes all registered devices. USE WITH CARE!!!
+     */
+    @ApiMethod(name = "deleteAll")
+    public void deleteAll() {
+        mLog.info("Deleting all registered devices");
+        mRegistrationDao.deleteAll();
+    }
 }

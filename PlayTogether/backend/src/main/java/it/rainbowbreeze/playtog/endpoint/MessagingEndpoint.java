@@ -63,6 +63,7 @@ public class MessagingEndpoint {
                 .addData(Bag.EXTRA_GCMACTION_TYPE, Bag.GCMACTION_SEARCH_FOR_PLAYERS)
                         // 113100264827945975278 - Play Together
                         // 108670469644954045753 - User test 1
+                        // 108659852221654912818 - User test 2 cool
                 .addData(Bag.EXTRA_PLAYER_ID, "108670469644954045753")
                 .build();
 

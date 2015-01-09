@@ -40,5 +40,10 @@ public abstract class BaseOfyDao <Ent> {
         return ofy().load().type(clazz).limit(MAX_COUNT).list();
     }
 
+    public void deleteAll() {
+        // https://groups.google.com/forum/#!msg/objectify-appengine/p4UylG6jTwU/qIT8sqrPBokJ
+        List<Key<Ent>> keys = ofy().load().type(clazz).keys().list();
+        ofy().delete().keys(keys).now();
+    }
 
 }

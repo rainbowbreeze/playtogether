@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import it.rainbowbreeze.playtog.common.ILogFacility;
+import it.rainbowbreeze.playtog.common.Utils;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.domain.Player;
 import it.rainbowbreeze.playtog.game.Game;
@@ -153,7 +154,7 @@ public class BackendHelper {
                     new AndroidJsonFactory(), null);
 
             //Run in the emulator, connect to local server
-            if (Build.FINGERPRINT.startsWith("generic")) {
+            if (Utils.runningOnEmulator()) {
                 // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
                 // otherwise they can be skipped
                 builder
@@ -182,7 +183,7 @@ public class BackendHelper {
                     new AndroidJsonFactory(), null);
 
             //Run in the emulator, connect to local server
-            if (Build.FINGERPRINT.startsWith("generic")) {
+            if (Utils.runningOnEmulator()) {
                 // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
                 // otherwise they can be skipped
                 builder

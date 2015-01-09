@@ -38,7 +38,7 @@ public class GcmMessageHelper {
      * @throws IOException
      */
     public void sendMessage(Message message) throws IOException {
-        // Ok, I now, it isn't the most optimized way of doing
+        // Ok, I know, it isn't the most optimized way of doing
         List<RegistrationRecord> registrations = mRegistrationDao.listAll();
         List<String> registrationIds = new ArrayList<>();
         for (RegistrationRecord registration : registrations) {

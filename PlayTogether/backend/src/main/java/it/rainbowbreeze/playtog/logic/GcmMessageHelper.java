@@ -38,19 +38,14 @@ public class GcmMessageHelper {
      * @throws IOException
      */
     public void sendMessage(Message message) throws IOException {
-        // Ok, I know, it isn't the most optimized way of doing
-        List<RegistrationRecord> registrations = mRegistrationDao.listAll();
-        List<String> registrationIds = new ArrayList<>();
-        for (RegistrationRecord registration : registrations) {
-            registrationIds.add(registration.getRegistrationId());
-        }
-        sendMessage(registrationIds, message);
+        sendMessage(mRegistrationDao.getAllRegistrationIds(), message);
     }
 
     public void sendMessage(List<String> registrationIds, Message message) throws IOException  {
         mLog.info("Sending to " + registrationIds.size() + " clients message " + message);
         for (String registrationId : registrationIds) {
-            Result result = mSender.send(message, registrationId, 5);
+            // sendNoReply otherwise a device switched off will receive the message the same
+            Result result = mSender.sendNoRetry(message, registrationId);
             if (result.getMessageId() != null) {
                 mLog.info("Message sent to " + registrationId);
                 String canonicalRegId = result.getCanonicalRegistrationId();

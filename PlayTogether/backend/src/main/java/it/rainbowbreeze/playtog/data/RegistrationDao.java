@@ -59,4 +59,14 @@ public class RegistrationDao extends BaseOfyDao<RegistrationRecord> {
         return registration;
     }
 
+    public List<String> getAllRegistrationIds() {
+        // Ok, I know, it isn't the most optimized way of doing
+        List<RegistrationRecord> registrations = listAll();
+        List<String> registrationIds = new ArrayList<>();
+        for (RegistrationRecord registration : registrations) {
+            registrationIds.add(registration.getRegistrationId());
+        }
+        return registrationIds;
+    }
+
 }

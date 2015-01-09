@@ -57,22 +57,31 @@ public class GameEndpoint {
     }
 
     public static class GameResult extends BaseResult {
-        private final String mGameId;
+        private final long mGameId;
 
-        public static GameResult WRONG_RESULT = new GameResult(false);
+        public static GameResult OK_RESULT = new GameResult(true);
 
-        public GameResult(String gameId) {
+        public GameResult(long gameId) {
             super(true);
             mGameId = gameId;
         }
 
-        private GameResult(boolean wentWell) {
-            super(wentWell);
-            mGameId = null;
+        private GameResult(String errorMessage) {
+            super(errorMessage);
+            mGameId = -1;
         }
 
-        public String getGameId() {
+        private GameResult(boolean wentWell) {
+            super(wentWell);
+            mGameId = -1;
+        }
+
+        public long getGameId() {
             return mGameId;
+        }
+
+        public static GameResult buildWithError(String errorMessage) {
+            return new GameResult(errorMessage);
         }
     }
 
@@ -94,7 +103,7 @@ public class GameEndpoint {
                 .setOwnerId(ownerId)
                 .setRoomId(roomId);
         mGameDao.save(game);
-        mLog.info("Saved new game request");
+        mLog.info("Saved new game request with game id " + game.getId());
 
         // Alerts other players for then new game request
         Message message = new Message.Builder()
@@ -117,14 +126,14 @@ public class GameEndpoint {
      */
     @ApiMethod(name = "participate")
     public GameResult participate(
-            @Named("gameId") String gameId,
+            @Named("gameId") long gameId,
             @Named("userId") String newUserId
     ) throws IOException {
         GameRecord game = mGameDao.get(gameId);
 
         if (null == game) {
             mLog.info("Cannot load the game to participate, aborting");
-            return GameResult.WRONG_RESULT;
+            return GameResult.buildWithError("Cannot load the game to participate, aborting");
         }
 
         // Adds the new player to the collection of players for a given game request
@@ -153,14 +162,27 @@ public class GameEndpoint {
      * @param gameId
      * @param playerIds
      */
-    @ApiMethod(name = "start")
+    // If not specified the right path (omitting playerIds from the path), usage of endpoints in
+    //  Android will generate an error like:
+    //    com.google.appengine.repackaged.org.codehaus.jackson.map.JsonMappingException:
+    //    Can not deserialize instance of java.lang.String[] out of VALUE_STRING token
+    @ApiMethod(
+            name = "start",
+            path = "start/{gameId}"
+    )
     public GameResult start(
-            @Named("gameId") String gameId,
+            @Named("gameId") long gameId,
             @Named("playerIds") List<String> playerIds
     ) throws IOException {
         GameRecord game = mGameDao.get(gameId);
         if (null == game) {
-            mLog.info("Cannot load the game to start, aborting");
+            mLog.info("Cannot load the game to start for the id " + gameId);
+            return GameResult.buildWithError("Cannot load the game to start for the id " + gameId);
+        }
+
+        if (null == playerIds || playerIds.size() == 0) {
+            mLog.info("Cannot start a game with no players");
+            return GameResult.buildWithError("Cannot start a game with no players");
         }
 
         // First of all, checks if accepted players really accepted the match
@@ -205,7 +227,7 @@ public class GameEndpoint {
 
         // Deletes the game record
         mGameDao.delete(game);
-        return new GameResult(null);
+        return GameResult.OK_RESULT;
     }
 
 }

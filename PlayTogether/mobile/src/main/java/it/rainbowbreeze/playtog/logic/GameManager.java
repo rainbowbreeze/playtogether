@@ -5,6 +5,8 @@ import android.support.v4.content.Loader;
 
 import com.squareup.otto.Bus;
 
+import java.util.List;
+
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
 import it.rainbowbreeze.playtog.data.PlayerDao;
@@ -117,19 +119,19 @@ public class GameManager {
                     }
                     switch (i) {
                         case 0:
-                            add(new Player().setName("Stefano Manca").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-nmitA-hkSEQ/Uq2f8lNFZ6I/AAAAAAAAIUo/81UQRcbPRnM/s788-no/54ef821b-b16c-44d6-afac-61a835a7a2bf"));
+                            add(new Player().setName("Stefano Manca").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-nmitA-hkSEQ/Uq2f8lNFZ6I/AAAAAAAAIUo/81UQRcbPRnM/s788-no/54ef821b-b16c-44d6-afac-61a835a7a2bf").setSocialId("Stefano"));
                             break;
                         case 1:
-                            add(new Player().setName("Alessandra Pugin").setSelected(false).setPictureUrl("https://lh3.googleusercontent.com/-Fymin8OPcGA/UrbfjUs7GEI/AAAAAAAAHxc/8FTjOYsnI9c/w480-h480/41356_484793799347_4458943_n.jpg"));
+                            add(new Player().setName("Alessandra Pugin").setSelected(false).setPictureUrl("https://lh3.googleusercontent.com/-Fymin8OPcGA/UrbfjUs7GEI/AAAAAAAAHxc/8FTjOYsnI9c/w480-h480/41356_484793799347_4458943_n.jpg").setSocialId("Alessandra"));
                             break;
                         case 2:
-                            add(new Player().setName("Fabio Ercolani").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-tIbufLRCQes/Tj-ceTA9C1I/AAAAAAAAG2Q/SZIq-bZCRv0/w790-h788-no/Nina%2B021.jpg"));
+                            add(new Player().setName("Fabio Ercolani").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-tIbufLRCQes/Tj-ceTA9C1I/AAAAAAAAG2Q/SZIq-bZCRv0/w790-h788-no/Nina%2B021.jpg").setSocialId("Fabio"));
                             break;
                         case 3:
-                            add(new Player().setName("Valentina Frassi").setSelected(false).setPictureUrl("http://lorempixel.com/400/400"));
+                            add(new Player().setName("Valentina Frassi").setSelected(false).setPictureUrl("http://lorempixel.com/400/400").setSocialId("Valentina"));
                             break;
                         default:
-                            add(new Player().setName("Alessandro Antiga").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-txy6s8_3HSU/UjsrZJT6jkI/AAAAAAAAHuw/xdSVu4KCH8U/s512-no/IMG_20130919_130416.jpg"));
+                            add(new Player().setName("Alessandro Antiga").setSelected(false).setPictureUrl("https://lh6.googleusercontent.com/-txy6s8_3HSU/UjsrZJT6jkI/AAAAAAAAHuw/xdSVu4KCH8U/s512-no/IMG_20130919_130416.jpg").setSocialId("Alessandro"));
                             break;
                     }
                     //mLogFacility.v(LOG_TAG, "Posting new player " + i);
@@ -145,13 +147,21 @@ public class GameManager {
      * Starts the game with the selected players
      */
     public void startTheGame() {
-        mStartedSearchForPlayers = false;
-        mPlayerDao.deleteAll();
+        List<String> socialIds = mPlayerDao.getSelectedPlayerIds();
+        long gameId = mAppPrefsManager.getCurrentGameId();
 
-        //TODO Sends notification to selected and not selected players
+        if (mBackendHelper.startGame(gameId, socialIds)) {
+            cleanGameStateAndData();
+        } else {
+            mLogFacility.v(LOG_TAG, "Cannot start the game because of a backend error");
+        }
+    }
 
-
-        //TODO Notifies the backend about the start of the game
+    /**
+     * Participate to a given game
+     * @param gameId
+     */
+    public void participate(String gameId) {
     }
 
 }

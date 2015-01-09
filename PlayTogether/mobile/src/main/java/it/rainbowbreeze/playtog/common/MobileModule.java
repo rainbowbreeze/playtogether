@@ -97,8 +97,9 @@ public class MobileModule {
     public ActionsManager provideActionsManager(
             @ForApplication Context appContext,
             ILogFacility logFacility,
-            BackendHelper backendHelper) {
-        return new ActionsManager(appContext, logFacility, backendHelper);
+            BackendHelper backendHelper,
+            GameManager gameManager) {
+        return new ActionsManager(appContext, logFacility, backendHelper, gameManager);
     }
 
     @Provides @Singleton

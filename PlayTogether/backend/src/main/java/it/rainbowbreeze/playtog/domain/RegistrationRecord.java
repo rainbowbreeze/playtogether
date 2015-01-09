@@ -13,11 +13,9 @@ public class RegistrationRecord {
     public RegistrationRecord() {
     }
 
-    @Id
-    Long id;
+    @Id Long id;
 
-    @Index
-    private String registrationId;
+    @Index private String registrationId;
     public String getRegistrationId() {
         return registrationId;
     }
@@ -26,8 +24,7 @@ public class RegistrationRecord {
         return this;
     }
 
-    @Index
-    private String userId;
+    @Index private String userId;
     public String getUserId() {
         return userId;
     }

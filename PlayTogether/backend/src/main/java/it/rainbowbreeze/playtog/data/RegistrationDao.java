@@ -52,7 +52,7 @@ public class RegistrationDao extends BaseOfyDao<RegistrationRecord> {
         delete(registration);
     }
 
-    private RegistrationRecord getFromRegistrationId(String registrationId) {
+    public RegistrationRecord getFromRegistrationId(String registrationId) {
         // Generally, only one entity is present for a given registrationId
         RegistrationRecord registration = ofy().load().type(RegistrationRecord.class)
                 .filter("registrationId", registrationId).first().now();

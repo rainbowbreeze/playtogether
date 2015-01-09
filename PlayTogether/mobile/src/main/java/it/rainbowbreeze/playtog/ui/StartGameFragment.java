@@ -22,6 +22,7 @@ import it.rainbowbreeze.playtog.R;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.logic.GameManager;
+import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 
 /**
  * Created by alfredomorresi on 02/01/15.
@@ -33,6 +34,7 @@ public class StartGameFragment
 
     @Inject ILogFacility mLogFacility;
     @Inject GameManager mGameManager;
+    @Inject ActionsManager mActionsManager;
     @Inject Bus mBus;
     private ListView mListView;
     private PlayersAdapter mPlayersAdapter;
@@ -75,7 +77,7 @@ public class StartGameFragment
         mBtnConfirmGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGameManager.startTheGame();
+                mActionsManager.startTheGame().executeAsync();
                 updateViewsStatus();
             }
         });

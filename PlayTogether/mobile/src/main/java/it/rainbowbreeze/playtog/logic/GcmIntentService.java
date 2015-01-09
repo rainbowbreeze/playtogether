@@ -12,6 +12,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import javax.inject.Inject;
 
+import it.rainbowbreeze.playtog.common.Bag;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
@@ -95,7 +96,15 @@ public class GcmIntentService extends IntentService {
 
     private void searchForPlayers(Bundle extras, String gplusId) {
         String roomId = extras.getString(EXTRA_ROOM_ID);
-        String gameId = extras.getString(EXTRA_GAME_ID);
+        String gameIdStr = extras.getString(EXTRA_GAME_ID);  // Only strings can be passed to a GCM message
+        long gameId;
+        try {
+            gameId = Long.parseLong(gameIdStr);
+        } catch (NumberFormatException ex) {
+            mLogFacility.e(LOG_TAG, "Cannot cast string " + gameIdStr + " to a valid game id, aborting");
+            return;
+        }
+
 
         if (TextUtils.isEmpty(gplusId) || TextUtils.isEmpty(roomId)) {
             mLogFacility.i(LOG_TAG, "Request to start a new game, but params are invalid. Room id: " + roomId + " - user id: " + gplusId);

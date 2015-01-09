@@ -95,7 +95,7 @@ public class BackendHelper {
         try {
             GameResult result = mGameService.searchForPlayers(player.getSocialId(), "IT-MIL-CON-4-FOOSBALL").execute();
             if (result.getSuccess()) {
-                mLogFacility.v(LOG_TAG, "Asked players for a new game");
+                mLogFacility.v(LOG_TAG, "Asked players for a new game, with id " + result.getGameId());
                 mAppPrefsManager.setCurrentGameId(result.getGameId());
                 return true;
             } else {
@@ -107,8 +107,8 @@ public class BackendHelper {
         return false;
     }
 
-    public boolean startGame(String gameId, List<String> playerIds) {
-        mLogFacility.v(LOG_TAG, "Starting a game with selected players " + gameId);
+    public boolean startGame(long gameId, List<String> playerIds) {
+        mLogFacility.v(LOG_TAG, "Starting the game " + gameId + " with " + playerIds.size() + " players");
         setupGame();
 
         try {
@@ -125,7 +125,7 @@ public class BackendHelper {
         return false;
     }
 
-    public boolean participateToAGame(String gameId) {
+    public boolean participateToAGame(long gameId) {
         mLogFacility.v(LOG_TAG, "Participating to a game " + gameId);
         setupGame();
 

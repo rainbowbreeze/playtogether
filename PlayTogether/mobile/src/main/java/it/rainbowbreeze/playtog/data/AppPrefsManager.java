@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.Date;
 
 import it.rainbowbreeze.libs.data.RainbowAppPrefsManager;
+import it.rainbowbreeze.playtog.common.Bag;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.domain.Player;
 
@@ -117,17 +118,17 @@ public class AppPrefsManager extends RainbowAppPrefsManager {
      * Look at GoogleCloudMessaging.html#unregister() reference for detailed instructions
      */
     private static final String PREF_CURRENT_GAME_ID = "pref_currentGameId";
-    public String getCurrentGameId() {
-        return mAppPreferences.getString(PREF_CURRENT_GAME_ID, null);
+    public long getCurrentGameId() {
+        return mAppPreferences.getLong(PREF_CURRENT_GAME_ID, Bag.ID_NOT_SET);
     }
-    public AppPrefsManager setCurrentGameId(String newValue) {
+    public AppPrefsManager setCurrentGameId(long newValue) {
         openSharedEditor();
-        mSharedEditor.putString(PREF_CURRENT_GAME_ID, newValue);
+        mSharedEditor.putLong(PREF_CURRENT_GAME_ID, newValue);
         saveIfNeeded();
         return this;
     }
     public AppPrefsManager resetCurrentGameId() {
-        return setCurrentGameId(null);
+        return setCurrentGameId(Bag.ID_NOT_SET);
     }
 
 }

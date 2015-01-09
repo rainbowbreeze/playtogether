@@ -58,20 +58,22 @@ public class RegistrationEndpoint {
             @Named("registrationId") String registrationId,
             @Named("userId") String userId
     ) {
-        RegistrationRecord registration = mRegistrationDao.get(registrationId);
+        RegistrationRecord registration = mRegistrationDao.getFromRegistrationId(registrationId);
         if (registration != null && registration.getUserId().equals(userId)) {
             mLog.info("Device " + registrationId + " already registered with the same user, skipping register");
             return;
         }
-        // Deletes old record, probably another user logged to the same device
-        mRegistrationDao.delete(registration);
+        if (registration != null) {
+            // Deletes old record, probably another user logged to the same device
+            mRegistrationDao.delete(registration);
+        }
 
         // Adds the new record
         RegistrationRecord record = new RegistrationRecord()
                 .setRegistrationId(registrationId)
                 .setUserId(userId);
         mRegistrationDao.save(record);
-        mLog.info("Registered new device: " + registrationId);
+        mLog.info("Registered new device: " + registrationId + " for user id " + userId);
     }
 
     /**
@@ -83,7 +85,7 @@ public class RegistrationEndpoint {
     public void unregisterDevice(
             @Named("registrationId") String registrationId
     ) {
-        RegistrationRecord record = mRegistrationDao.get(registrationId);
+        RegistrationRecord record = mRegistrationDao.getFromRegistrationId(registrationId);
         if (record == null) {
             mLog.info("Device " + registrationId + " not registered, skipping unregister");
             return;

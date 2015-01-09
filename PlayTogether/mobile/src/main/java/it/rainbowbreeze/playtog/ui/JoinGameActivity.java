@@ -1,6 +1,5 @@
 package it.rainbowbreeze.playtog.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
@@ -16,8 +15,10 @@ import javax.inject.Inject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.rainbowbreeze.playtog.R;
+import it.rainbowbreeze.playtog.common.Bag;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
+import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 
 /**
  * Created by alfredomorresi on 07/01/15.
@@ -31,7 +32,8 @@ public class JoinGameActivity extends ActionBarActivity {
     public static final String EXTRA_ROOM_ID = "Extra.RoomId";
 
     @Inject ILogFacility mLogFacility;
-    private String mGameId;
+    @Inject ActionsManager mActionsManager;
+    private long mGameId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class JoinGameActivity extends ActionBarActivity {
 
         String playerName = getIntent().getStringExtra(EXTRA_PLAYER_NAME);
         String playerProfileUrl = getIntent().getStringExtra(EXTRA_PLAYER_PICTURE_URL);
-        mGameId = getIntent().getStringExtra(EXTRA_GAME_ID);
+        mGameId = getIntent().getLongExtra(EXTRA_GAME_ID, Bag.ID_NOT_SET);
 
         TextView lblMessage = (TextView) findViewById(R.id.joingame_lblMessage);
         String message = String.format(
@@ -69,6 +71,9 @@ public class JoinGameActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(JoinGameActivity.this, "Accepted", Toast.LENGTH_SHORT).show();
+                mActionsManager.participateToAGame()
+                        .setGameId(mGameId)
+                        .executeAsync();
                 finish();
             }
         });

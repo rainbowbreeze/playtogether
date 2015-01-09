@@ -252,7 +252,7 @@ public class PlusSignInActivity
         // TODO move from here
         mLogFacility.v(LOG_TAG, "Creating a player from current user " + player.getName() + " - GPlus Id:" + player.getSocialId());
         mAppPrefsManager.setCurrentPlayer(player);
-        mActionsManager.SubscribeClientToGcm().executeAsync();
+        mActionsManager.subscribeClientToGcm().executeAsync();
 
         // Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
         //        .setResultCallback(this);
@@ -372,7 +372,7 @@ public class PlusSignInActivity
         mRevokeButton.setEnabled(false);
 
         mAppPrefsManager.resetCurrentPlayer();
-        mActionsManager.UnsubscribeClientToGcm().executeAsync();
+        mActionsManager.unsubscribeClientToGcm().executeAsync();
         mStatus.setText(R.string.plussignin_statusSignedOut);
     }
 

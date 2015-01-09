@@ -1,7 +1,7 @@
 package it.rainbowbreeze.playtog.logic.actions;
 
-import it.rainbowbreeze.libs.common.IRainbowLogFacility;
 import it.rainbowbreeze.libs.logic.RainbowActionsManager;
+import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.logic.BackendHelper;
 
 /**
@@ -12,7 +12,7 @@ public class SubscribeClientToGcmAction extends RainbowActionsManager.BaseAction
 
     private final BackendHelper mBackendHelper;
 
-    protected SubscribeClientToGcmAction(IRainbowLogFacility logFacility, BackendHelper backendHelper, ActionsManager actionManager) {
+    protected SubscribeClientToGcmAction(ILogFacility logFacility, BackendHelper backendHelper, ActionsManager actionManager) {
         super(logFacility, actionManager);
         mBackendHelper = backendHelper;
     }

@@ -1,5 +1,6 @@
 package it.rainbowbreeze.playtog.domain;
 
+import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
@@ -9,15 +10,15 @@ import java.util.List;
 /**
  * Created by alfredomorresi on 07/01/15.
  */
+@Entity
 public class GameRecord {
 
     public GameRecord() {
         playerIds = new ArrayList<>();
     }
 
-    @Id
-    String id;
-    public String getId() {
+    @Id Long id;
+    public Long getId() {
         return id;
     }
 
@@ -32,8 +33,7 @@ public class GameRecord {
     }
 
     /** room id of the match */
-    @Index
-    private String roomId;
+    @Index private String roomId;
     public String getRoomId() {
         return roomId;
     }

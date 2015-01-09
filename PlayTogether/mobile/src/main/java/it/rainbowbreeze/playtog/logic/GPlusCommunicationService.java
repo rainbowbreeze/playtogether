@@ -9,6 +9,7 @@ import com.google.android.gms.plus.Plus;
 
 import javax.inject.Inject;
 
+import it.rainbowbreeze.playtog.common.Bag;
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.common.MyApp;
 import it.rainbowbreeze.playtog.data.AppPrefsManager;
@@ -95,7 +96,7 @@ public class GPlusCommunicationService extends GoogleApiClientBaseService {
         } else if (ACTION_SEARCH_FOR_PLAYERS.equals(intent.getAction())) {
             // Retrieves asking user details
             String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
-            String gameId = intent.getStringExtra(EXTRA_GAME_ID);
+            long gameId = intent.getLongExtra(EXTRA_GAME_ID, Bag.ID_NOT_SET);
             Player askingPlayer = mGPlusHelper.get(mGoogleApiClient, userId);
             if (null != askingPlayer) {
                 mLogFacility.v(LOG_TAG, askingPlayer.getName() + " has asked to join a new game for room " + roomId);

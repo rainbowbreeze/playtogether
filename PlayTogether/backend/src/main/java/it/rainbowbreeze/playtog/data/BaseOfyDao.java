@@ -1,5 +1,7 @@
 package it.rainbowbreeze.playtog.data;
 
+import com.googlecode.objectify.Key;
+
 import java.util.List;
 
 import static it.rainbowbreeze.playtog.data.OfyService.ofy;
@@ -26,7 +28,7 @@ public abstract class BaseOfyDao <Ent> {
         ofy().save().entity(entity).now();
     }
 
-    public Ent get(String id) {
+    public Ent get(long id) {
         return ofy().load().type(clazz).id(id).now();
     }
 

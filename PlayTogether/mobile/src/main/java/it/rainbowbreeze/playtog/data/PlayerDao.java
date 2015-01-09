@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.rainbowbreeze.playtog.common.ILogFacility;
 import it.rainbowbreeze.playtog.data.provider.player.PlayerColumns;
 import it.rainbowbreeze.playtog.data.provider.player.PlayerContentValues;
@@ -156,4 +159,18 @@ public class PlayerDao {
         return update(playerId, values);
     }
 
+    public List<String> getSelectedPlayerIds() {
+        mLogFacility.v(LOG_TAG, "Listing selected players social ids");
+        PlayerSelection where = new PlayerSelection();
+        where.selected(true);
+        PlayerCursor c = where.query(
+                mAppContext.getContentResolver(),
+                new String[]{PlayerColumns.SOCIALID});
+        List<String> socialIds = new ArrayList<>();
+        while (c.moveToNext()) {
+            socialIds.add(c.getSocialid());
+        }
+        c.close();
+        return socialIds;
+    }
 }

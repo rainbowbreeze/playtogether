@@ -6,9 +6,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string-array name="navigation_arrSections">
-        <item>Section 1</item>
-        <item>Section 2</item>
-        <item>User Profile</item>
+        <item>Play!</item>
+        <item>Stats</item>
+        <item>Profile</item>
     </string-array>
 
     <string name="action_example">Example action</string>

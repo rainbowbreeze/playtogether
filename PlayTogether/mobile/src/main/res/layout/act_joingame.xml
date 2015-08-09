@@ -59,8 +59,8 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/joingame_imgProfile"
-            android:layout_width="@dimen/navigation_drawer_width"
-            android:layout_height="@dimen/navigation_drawer_width"
+            android:layout_width="@dimen/common_avatar_size"
+            android:layout_height="@dimen/common_avatar_size"
             android:layout_centerHorizontal="true"
             app:border_width="2dp"
             app:border_color="#FF000000"
@@ -69,7 +69,7 @@
 
         <TextView
             android:id="@+id/joingame_lblMessage"
-            style="@style/commom_lblMessage"
+            style="@style/common_lblMessage"
             android:layout_below="@id/joingame_imgProfile"
         />
     </RelativeLayout>

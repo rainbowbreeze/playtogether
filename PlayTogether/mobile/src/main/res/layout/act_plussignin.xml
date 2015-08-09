@@ -29,7 +29,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/common_activity_margin"
         android:orientation="vertical"
     >
 
@@ -37,26 +37,28 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/plussignin_imgProfile"
-            android:layout_width="@dimen/navigation_drawer_width"
-            android:layout_height="@dimen/navigation_drawer_width"
-            android:layout_marginBottom="20dp"
+            android:layout_width="@dimen/common_avatar_size"
+            android:layout_height="@dimen/common_avatar_size"
+            android:layout_marginBottom="@dimen/common_marginBottom_large"
             android:layout_gravity="center_horizontal"
             app:border_width="2dp"
-            app:border_color="#FF000000"
+            app:border_color="@color/icons"
             android:src="@drawable/ic_noprofile"
         />
 
         <TextView
             android:id="@+id/plussignin_lblStatus"
-            style="@style/commom_lblMessage"
-            android:layout_marginBottom="20dp"
+            style="@style/common_lblMessage"
+            android:layout_marginBottom="@dimen/common_marginBottom_large"
             android:text="@string/plussignin_statusSignedOut"
+            android:textColor="@color/primary_text"
         />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/plussignin_btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_marginBottom_small"
             android:enabled="false"
         />
 
@@ -65,6 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/plussignin_btnSignOut"
+            android:layout_marginBottom="@dimen/common_marginBottom_small"
             android:enabled="false"
         />
 

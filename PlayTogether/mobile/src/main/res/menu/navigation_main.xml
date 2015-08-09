@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Copyright 2015 Google Inc.
   
@@ -14,13 +15,28 @@
   limitations under the License.
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  -->
 
-<RelativeLayout
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/common_fragmentMainLayout"
-    tools:context="it.rainbowbreeze.playtog.ui.PlaceholderFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_play"
+            android:title="@string/navigation_play"
+            android:checked="false"
+        />
 
-</RelativeLayout>
+        <item
+            android:id="@+id/action_stats"
+            android:title="@string/navigation_stats"
+            android:checked="false"
+        />
+
+        <item
+            android:id="@+id/action_profile"
+            android:title="@string/navigation_profile"
+            android:checked="false"
+        />
+
+    </group>
+</menu>

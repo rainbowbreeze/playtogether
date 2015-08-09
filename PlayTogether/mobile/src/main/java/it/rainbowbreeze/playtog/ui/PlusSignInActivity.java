@@ -23,7 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +74,7 @@ import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
  */
 
 public class PlusSignInActivity
-        extends ActionBarActivity
+        extends AppCompatActivity
         implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
     private static final String LOG_TAG = PlusSignInActivity.class.getSimpleName();
 
@@ -139,6 +140,10 @@ public class PlusSignInActivity
         mLaunchNewActivityAtTheEnd = getIntent().getBooleanExtra(EXTRA_LAUNCHNEWACTIVITY, false);
 
         setContentView(R.layout.act_plussignin);
+
+        // Initializing Toolbar and setting it as the actionbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mImgProfile = (CircleImageView) findViewById(R.id.plussignin_imgProfile);
         mSignInButton = (SignInButton) findViewById(R.id.plussignin_btnSignIn);

@@ -19,13 +19,9 @@
 
     <string name="app_name">Play Together</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string-array name="navigation_arrSections">
-        <item>Play!</item>
-        <item>Stats</item>
-        <item>Profile</item>
-    </string-array>
+    <string name="navigation_play">Play!</string>
+    <string name="navigation_stats">Stats</string>
+    <string name="navigation_profile">Profile</string>
 
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
@@ -49,5 +45,6 @@
     <string name="joingame_btnAccept">Accept!</string>
     <string name="joingame_btnRefuse">Refuse :(</string>
     <string name="joingame_lblMessage">%1$s has asked to join the game %2$s</string>
+
 
 </resources>

@@ -386,7 +386,7 @@ public class PlusSignInActivity
 
     private void onSignedOut() {
         // Update the UI to reflect that the user is signed out.
-        mImgProfile.setVisibility(View.GONE);
+        //mImgProfile.setVisibility(View.GONE);
         mSignInButton.setEnabled(true);
         mSignInButton.setVisibility(View.VISIBLE);
         mSignOutButton.setEnabled(false);

@@ -45,6 +45,7 @@
     <string name="joingame_btnAccept">Accept!</string>
     <string name="joingame_btnRefuse">Refuse :(</string>
     <string name="joingame_lblMessage">%1$s has asked to join the game %2$s</string>
+    <string name="navigation_settings">Settings</string>
 
 
 </resources>

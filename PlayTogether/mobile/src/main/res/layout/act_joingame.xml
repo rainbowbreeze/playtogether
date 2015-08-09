@@ -22,7 +22,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dip"
-    tools:context="it.rainbowbreeze.playtog.ui.JoinGameActivity"
+    tools:context=".ui.JoinGameActivity"
 >
 
     <LinearLayout

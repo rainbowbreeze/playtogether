@@ -22,8 +22,10 @@
     android:layout_height="match_parent"
     android:padding="20dip"
     android:orientation="vertical"
-    tools:context="it.rainbowbreeze.playtog.ui.PlusSignInActivity"
+    tools:context=".ui.PlusSignInActivity"
 >
+
+    <include layout="@layout/vw_toolbar" />
 
     <RelativeLayout
         android:id="@+id/plussignin_layProfile"
@@ -31,10 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
     >
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/common_toolbar"
-        />
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -46,7 +44,7 @@
             app:border_color="#FF000000"
             android:src="@drawable/ic_launcher"
             android:visibility="gone"
-            />
+        />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/plussignin_btnSignIn"

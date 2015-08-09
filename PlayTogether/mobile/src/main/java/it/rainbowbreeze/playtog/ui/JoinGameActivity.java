@@ -19,6 +19,8 @@ package it.rainbowbreeze.playtog.ui;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +41,7 @@ import it.rainbowbreeze.playtog.logic.actions.ActionsManager;
 /**
  * Created by alfredomorresi on 07/01/15.
  */
-public class JoinGameActivity extends ActionBarActivity {
+public class JoinGameActivity extends AppCompatActivity {
     private static final String LOG_TAG = JoinGameActivity.class.getSimpleName();
 
     public static final String EXTRA_PLAYER_NAME = "PlayerName";
@@ -58,6 +60,9 @@ public class JoinGameActivity extends ActionBarActivity {
         mLogFacility.logStartOfActivity(LOG_TAG, JoinGameActivity.class, savedInstanceState);
 
         setContentView(R.layout.act_joingame);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         String playerName = getIntent().getStringExtra(EXTRA_PLAYER_NAME);
         String playerProfileUrl = getIntent().getStringExtra(EXTRA_PLAYER_PICTURE_URL);

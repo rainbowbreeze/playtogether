@@ -26,24 +26,24 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/drawer_imgProfile"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
+        android:layout_width="@dimen/common_avatar_drawer_size"
+        android:layout_height="@dimen/common_avatar_drawer_size"
         android:src="@drawable/ic_noprofile"
-        app:border_color="#FF000000"
-        android:layout_marginLeft="24dp"
-        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/common_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/common_activity_vertical_margin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
+        android:layout_marginBottom="@dimen/common_marginBottom_normal"
+        app:border_width="2dp"
+        app:border_color="@color/icons"
     />
 
     <TextView
         android:id="@+id/drawer_lblUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-- User Name --"
+        android:text="User not logged"
         android:gravity="left"
-        android:paddingBottom="4dp"
         android:layout_below="@id/drawer_imgProfile"
         android:layout_alignLeft="@+id/drawer_imgProfile"
         android:layout_alignStart="@+id/drawer_imgProfile"

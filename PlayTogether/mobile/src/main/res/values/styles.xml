@@ -23,6 +23,8 @@
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item> 
         <item name="colorPrimaryDark">@color/primary_dark</item> 
+        <!-- TODO don't know if the following line works -->
+        <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="colorControlHighlight">@color/accent_translucent</item> 
         <item name="colorAccent">@color/accent</item>
         <!-- https://github.com/antoniolg/MaterializeYourApp/blob/master/app/src/main/res/values/styles.xml
